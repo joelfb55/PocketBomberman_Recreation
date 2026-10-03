@@ -10,7 +10,7 @@
 
 #define JUMP_ANGLE_STEP 4
 #define FALL_STEP 4
-#define JUMP_HEIGHT 3*16		// bloques * pixeles_bloque
+#define JUMP_HEIGHT 4*16		// bloques * pixeles_bloque
 
 #define DEATH_ANIMATION_TIME 1000.f
 
