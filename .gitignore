@@ -1,0 +1,9 @@
+.vs/
+Debug/
+Release/
+libs/
+x64/
+x86/
+*.obj
+*.exe
+*.pbd

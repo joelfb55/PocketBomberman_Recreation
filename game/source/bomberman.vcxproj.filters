@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>Archivos de código fuente\Enemigos</Filter>
+    </ClCompile>
+    <ClCompile Include="FloatingEnemy.cpp">
+      <Filter>Archivos de código fuente\Enemigos</Filter>
+    </ClCompile>
+    <ClCompile Include="WalkerEnemy.cpp">
+      <Filter>Archivos de código fuente\Enemigos</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Archivos de código fuente\General</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>Archivos de código fuente\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene.cpp">
+      <Filter>Archivos de código fuente\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Archivos de código fuente\General</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderProgram.cpp">
+      <Filter>Archivos de código fuente\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Archivos de código fuente\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture.cpp">
+      <Filter>Archivos de código fuente\General</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Archivos de código fuente\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Bomba.cpp">
+      <Filter>Archivos de código fuente\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Explosion.cpp">
+      <Filter>Archivos de código fuente\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>Archivos de código fuente\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="BombUp.cpp">
+      <Filter>Archivos de código fuente\PowerUps</Filter>
+    </ClCompile>
+    <ClCompile Include="FireUp.cpp">
+      <Filter>Archivos de código fuente\PowerUps</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerUp.cpp">
+      <Filter>Archivos de código fuente\PowerUps</Filter>
+    </ClCompile>
+    <ClCompile Include="WalkerEnemy.h">
+      <Filter>Archivos de encabezado\Enemigos</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Archivos de código fuente\General</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostEnemy.cpp">
+      <Filter>Archivos de código fuente\Enemigos</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AnimKeyframes.h">
+      <Filter>Archivos de encabezado\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>Archivos de encabezado\Enemigos</Filter>
+    </ClInclude>
+    <ClInclude Include="FloatingEnemy.h">
+      <Filter>Archivos de encabezado\Enemigos</Filter>
+    </ClInclude>
+    <ClInclude Include="Bomba.h">
+      <Filter>Archivos de encabezado\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Explosion.h">
+      <Filter>Archivos de encabezado\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>Archivos de encabezado\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="BombUp.h">
+      <Filter>Archivos de encabezado\PowerUps</Filter>
+    </ClInclude>
+    <ClInclude Include="FireUp.h">
+      <Filter>Archivos de encabezado\PowerUps</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerUp.h">
+      <Filter>Archivos de encabezado\PowerUps</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Archivos de encabezado\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene.h">
+      <Filter>Archivos de encabezado\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>Archivos de encabezado\General</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderProgram.h">
+      <Filter>Archivos de encabezado\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>Archivos de encabezado\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>Archivos de encabezado\General</Filter>
+    </ClInclude>
+    <ClInclude Include="TileMap.h">
+      <Filter>Archivos de encabezado\General</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Archivos de encabezado\General</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostEnemy.h">
+      <Filter>Archivos de encabezado\Enemigos</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Archivos de código fuente">
+      <UniqueIdentifier>{2dedcf18-a376-4a18-9270-1e86f8dbcf09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado">
+      <UniqueIdentifier>{f61a8fae-7279-4a7f-a260-479f321c1cd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de código fuente\Enemigos">
+      <UniqueIdentifier>{3ad2804c-64be-44eb-8001-765d36b27297}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de código fuente\General">
+      <UniqueIdentifier>{82577b4a-3406-4490-ac59-29e46f5bbd7a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de código fuente\Player">
+      <UniqueIdentifier>{60fe8e5b-6b67-47f8-b654-ff2073aab5db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de código fuente\PowerUps">
+      <UniqueIdentifier>{5a020cbc-56cc-4573-bb42-346e4b117446}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Enemigos">
+      <UniqueIdentifier>{354c9661-f1a2-478e-b9b0-1000e8ee4a4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Player">
+      <UniqueIdentifier>{4edd8bf0-0455-4c60-a684-87d6d14ea636}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\General">
+      <UniqueIdentifier>{b672576e-4332-4875-8f61-9c96026bfdb7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\PowerUps">
+      <UniqueIdentifier>{1fb51aab-79ff-4d5b-95af-c045ad727526}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
