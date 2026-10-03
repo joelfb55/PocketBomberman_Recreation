@@ -130,6 +130,7 @@ void Explosion::calculateExpansion(const glm::ivec2& center, int radius, ShaderP
             if (map->isDestructibleTile(gridX, gridY)) {
                 cout << "yes" << endl;
                 map->destroyTile(gridX, gridY);
+                break;
             }
 
             affectedTiles.push_back(currentTile);

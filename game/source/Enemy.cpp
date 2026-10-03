@@ -11,7 +11,7 @@
 Enemy::~Enemy() { if (sprite) delete sprite; }
 
 // FUNCIONES DE JUEGO
-void Enemy::update(int deltaTime, TileMap* map) {
+void Enemy::update(int deltaTime, TileMap* map, glm::vec2 player_pos) {
     if (state == EnemyState::DYING) {
         deathTimer -= static_cast<float>(deltaTime);
         if (sprite) sprite->update(deltaTime);
@@ -24,7 +24,7 @@ void Enemy::update(int deltaTime, TileMap* map) {
     if (state == EnemyState::DEAD) return;
 
     // Se deriba el resto del comportamineto a las clases hijo
-    updateLogic(deltaTime, map);
+    updateLogic(deltaTime, map, player_pos);
 }
 void Enemy::render() {
     if (sprite && state != EnemyState::DEAD) {

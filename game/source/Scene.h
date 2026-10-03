@@ -15,28 +15,33 @@
 #include "FloatingEnemy.h"
 #include "GhostEnemy.h"
 
+
+enum class GameState { MENU, GAME };
+
 class Scene
 {
 public:
 	// FUNCIONES DE OBJETO
 	Scene();
 	~Scene();
-	void init(int i);
+	void init();
 	
 	// FUNCIONES DE JUEGO
+	void init_level(int i);
 	void update(int deltaTime);
 	void render();
 	
 	// FUNCIONES AUXILIARES
 	void setGodMode();
 	void killAllEnemys();
-	void restartLevel(int i);
 
 	void enemy_killed();
-	void menu_control();
 
 private:
 	void initShaders();
+
+	void spawnPower(EntitySpawn t);
+	
 
 	glm::vec2 getCameraPosition() const;
 	void updateCamera();
@@ -65,8 +70,8 @@ private:
 
 	int level;
 	int enemies;
-	int menu = true;
-	int menu_state = 0;
+	int menu_state;
+	GameState state;
 
 };
 #endif // _SCENE_INCLUDE

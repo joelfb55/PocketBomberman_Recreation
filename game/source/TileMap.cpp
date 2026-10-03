@@ -77,6 +77,7 @@ bool TileMap::loadLevel(const string &levelFile){
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 	
 	map = new int[mapSize.x * mapSize.y];
+	powerups = new EntityType[mapSize.x * mapSize.y];
 	for(int j=0; j<mapSize.y; j++)
 	{
 		for(int i=0; i<mapSize.x; i++)
@@ -103,28 +104,35 @@ bool TileMap::loadLevel(const string &levelFile){
 			}
 
 			// Entidades
-			else {
+			else if (tile == 'G' || tile == 'W' || tile == 'Y' || tile == 'P') {
 				map[j * mapSize.x + i] = 0;
+				EntitySpawn spawn;
+				spawn.tileCoords = glm::ivec2(i, j);
 
-				if (tile == 'G' || tile == 'W' || tile == 'Y' || tile == 'P' || tile == 'B' || tile == 'F') {
-					EntitySpawn spawn;
-					spawn.tileCoords = glm::ivec2(i, j);
-
-					if (tile == 'W') spawn.type = EntityType::WALKER_ENEMY;
-					else if (tile == 'Y') spawn.type = EntityType::FLOATING_ENEMY;
-					else if (tile == 'G') spawn.type = EntityType::GHOST_ENEMY;
-					else if (tile == 'P') spawn.type = EntityType::PLAYER_SPAWN;
-					else if (tile == 'B') spawn.type = EntityType::BOMB_UP;
-					else if (tile == 'F') spawn.type = EntityType::FIRE_UP;
-
-					spawns.push_back(spawn);
-				}
+				if (tile == 'W') spawn.type = EntityType::WALKER_ENEMY;
+				else if (tile == 'Y') spawn.type = EntityType::FLOATING_ENEMY;
+				else if (tile == 'G') spawn.type = EntityType::GHOST_ENEMY;
+				else if (tile == 'P') spawn.type = EntityType::PLAYER_SPAWN;
+				spawns.push_back(spawn);
 			}
+
+			// PowerUps
+			else if (tile == 'B') {
+				//spawn.type = EntityType::BOMB_UP;
+				map[j * mapSize.x + i] = 8;
+				powerups[j * mapSize.x + i] = EntityType::BOMB_UP;
+			}
+			else if (tile == 'F') {
+				//spawn.type = EntityType::FIRE_UP;
+				map[j * mapSize.x + i] = 8;
+				powerups[j * mapSize.x + i] = EntityType::FIRE_UP;
+			}
+
 		}
 		fin.get(tile);
-#ifndef _WIN32
+		#ifndef _WIN32
 		fin.get(tile);
-#endif
+		#endif
 	}
 	fin.close();
 	
@@ -288,6 +296,8 @@ bool TileMap::isTileSolid(int tileX, int tileY) const {
 
 const std::vector<EntitySpawn>& TileMap::getEntitySpawns() const { return spawns; }
 
+const std::queue<EntitySpawn>& TileMap::getPowerUpSpawns() const { return powerUpSpawns; }
+
 //---
 bool TileMap::isWallTile(int tileX, int tileY) const {
 	if (tileX < 0 || tileX >= mapSize.x || tileY < 0 || tileY >= mapSize.y)
@@ -310,6 +320,12 @@ bool TileMap::destroyTile(int tileX, int tileY) {
 	if (isDestructibleTile(tileX, tileY)) {
 		map[tileY * mapSize.x + tileX] = 0;
 		rebuildVBO();
+		if (powerups[tileY * mapSize.x + tileX] != EntityType::NOTHING) {
+			EntitySpawn spawn;
+			spawn.tileCoords = glm::ivec2(tileX, tileY);
+			spawn.type = powerups[tileY * mapSize.x + tileX];
+			powerUpSpawns.push(spawn);
+		}
 		return true;
 	}
 	return false;
@@ -318,4 +334,8 @@ bool TileMap::destroyTile(int tileX, int tileY) {
 void TileMap::rebuildVBO() {
 	free();
 	prepareArrays(minTileCoords, *currentProgramPtr);
+}
+
+void TileMap::resetPowers() {
+	std::queue<EntitySpawn>().swap(powerUpSpawns);
 }

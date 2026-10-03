@@ -16,7 +16,7 @@ public:
     virtual void init(const glm::vec2& pos, const glm::ivec2& tileMapDispl, ShaderProgram& shaderProgram) = 0;
 
     // FUNCIONES DE JUEGO
-    void update(int deltaTime, TileMap* map);
+    void update(int deltaTime, TileMap* map, glm::vec2 player_pos);
     void render();
 
     // FUNCIONES AUXILIARES
@@ -29,7 +29,7 @@ public:
     bool isReallyAlive() const;
 
 protected:
-    virtual void updateLogic(int deltaTime, TileMap* map) = 0;
+    virtual void updateLogic(int deltaTime, TileMap* map, glm::vec2 player_pos) = 0;
 
 protected:
     // Render

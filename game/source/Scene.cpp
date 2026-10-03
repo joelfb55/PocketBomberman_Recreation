@@ -47,83 +47,14 @@ Scene::~Scene(){
 	}
 	activeEnemys.clear();
 }
-void Scene::init(int i){
+
+void Scene::init(){
 	initShaders();
-	
-	level = i;
-	enemies = 0;
-	
-
-	// Mapa
-	map = TileMap::createTileMap("levels/level" + to_string(i) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
-	map->setActiveBombs(&activeBombs);
-
-	// Entidades
-	const auto& spawns = map->getEntitySpawns();
-	int tSize = map->getTileSize();
-
-	for (const EntitySpawn& spawn : spawns) {
-		glm::vec2 pixelPos = glm::vec2(spawn.tileCoords.x * tSize, spawn.tileCoords.y * tSize);
-
-		switch (spawn.type) {
-			case EntityType::PLAYER_SPAWN: {
-				if(player == nullptr) player = new Player();
-				player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-				player->setTileMap(map);
-
-				playerSpawnPoint = pixelPos;
-				player->setPosition(playerSpawnPoint);
-				break;
-			}
-
-			case EntityType::WALKER_ENEMY: {
-				WalkerEnemy* enemy1 = new WalkerEnemy();
-				enemy1->init(pixelPos, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-				activeEnemys.push_back(enemy1);
-				++enemies;
-				break;
-			}
-
-			case EntityType::FLOATING_ENEMY: {
-				FloatingEnemy* enemy1 = new FloatingEnemy();
-				enemy1->init(pixelPos, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-				activeEnemys.push_back(enemy1);
-				++enemies;
-				break;
-			}
-
-			case EntityType::GHOST_ENEMY: {
-				GhostEnemy* enemy1 = new GhostEnemy();
-				enemy1->init(pixelPos, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-				activeEnemys.push_back(enemy1);
-				++enemies;
-				break;
-			}
-
-			case EntityType::BOMB_UP: {
-				BombUp* power = new BombUp();
-				power->init(pixelPos, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-				activePowerUps.push_back(power);
-				break;
-			}
-
-			case EntityType::FIRE_UP: {
-				FireUp* power = new FireUp();
-				power->init(pixelPos, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
-				activePowerUps.push_back(power);
-				break;
-			}
-		}
-	}
-
-	// Inicializar la camara centrada en el jugador
-	glm::vec2 playerPos = player->getPosition();
-	cameraPos.x = playerPos.x - (VIRTUAL_WIDTH / 2.0f);
-	cameraPos.y = playerPos.y - (VIRTUAL_HEIGHT / 2.0f);
-
-	currentTime = 0.0f;
-	cout << enemies << endl;
+	state = GameState::MENU;
+	menu_state = 0;
+	level = 1;
 }
+
 void Scene::initShaders() {
 	Shader vShader, fShader;
 
@@ -153,159 +84,272 @@ void Scene::initShaders() {
 	fShader.free();
 }
 
+void Scene::init_level(int i) {
+	// Reset Bombas
+	for (Bomba* bomb : activeBombs) delete bomb;
+	activeBombs.clear();
+	for (Explosion* expl : activeExplosions) delete expl;
+	activeExplosions.clear();
+
+	// Reset enemigos
+	killAllEnemys();
+	for (Enemy* e : activeEnemys) delete e;
+	activeEnemys.clear();
+
+	// Reset PowerUps
+
+
+	level = i;
+	menu_state = i;
+	state = GameState::MENU;
+	enemies = 0;
+
+	// Mapa
+	map = TileMap::createTileMap("levels/level" + to_string(i) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
+	map->setActiveBombs(&activeBombs);
+
+	// Entidades
+	const auto& spawns = map->getEntitySpawns();
+	int tSize = map->getTileSize();
+
+	for (const EntitySpawn& spawn : spawns) {
+		glm::vec2 pixelPos = glm::vec2(spawn.tileCoords.x * tSize, spawn.tileCoords.y * tSize);
+
+		switch (spawn.type) {
+		case EntityType::PLAYER_SPAWN: {
+			if (player == nullptr) player = new Player();
+			player->init(glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+			player->setTileMap(map);
+			playerSpawnPoint = pixelPos;
+			player->setPosition(playerSpawnPoint);
+			break;
+		}
+
+		case EntityType::WALKER_ENEMY: {
+			WalkerEnemy* enemy1 = new WalkerEnemy();
+			enemy1->init(pixelPos, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+			activeEnemys.push_back(enemy1);
+			++enemies;
+			break;
+		}
+
+		case EntityType::FLOATING_ENEMY: {
+			FloatingEnemy* enemy1 = new FloatingEnemy();
+			enemy1->init(pixelPos, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+			activeEnemys.push_back(enemy1);
+			++enemies;
+			break;
+		}
+
+		case EntityType::GHOST_ENEMY: {
+			GhostEnemy* enemy1 = new GhostEnemy();
+			enemy1->init(pixelPos, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+			activeEnemys.push_back(enemy1);
+			++enemies;
+			break;
+		}
+		}
+	}
+
+	// Inicializar la camara centrada en el jugador
+	glm::vec2 playerPos = player->getPosition();
+	cameraPos.x = playerPos.x - (VIRTUAL_WIDTH / 2.0f);
+	cameraPos.y = playerPos.y - (VIRTUAL_HEIGHT / 2.0f);
+
+	currentTime = 0.0f;
+	cout << enemies << endl;
+
+	player->reset();
+}
+
+void Scene::spawnPower(EntitySpawn spawn) {
+	int tSize = map->getTileSize();
+	glm::vec2 pixelPos = glm::vec2(spawn.tileCoords.x * tSize, spawn.tileCoords.y * tSize);
+	switch (spawn.type) {
+	case EntityType::BOMB_UP: {
+		BombUp* power = new BombUp();
+		power->init(pixelPos, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		activePowerUps.push_back(power);
+		break;
+	}
+	case EntityType::FIRE_UP: {
+		FireUp* power = new FireUp();
+		power->init(pixelPos, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		activePowerUps.push_back(power);
+		break;
+	}
+	}
+}
+
 
 // FUNCIONES DE JUEGO
 void Scene::update(int deltaTime) {
 	currentTime += deltaTime;
 
-	if (menu) return;
-
-	// Si el player quiere poner bomba
-	if (player->wantsToGenerateABomb()) {
-		if (!dropBombKeyPressed) {
-			dropBombKeyPressed = true; // Bloquea la creación hasta soltar la tecla
-
-			if (player->canDropBomb()) {
-				glm::ivec2 bombPos = player->getBombTilePosition(map->getTileSize());
-
-				// Comprobar no haya otra en el sitio ya
-				bool canBomb = true;
-				for (Bomba* bomb : activeBombs) if (bomb->getTilePos() == bombPos) canBomb = false;
-
-				if (canBomb) {
-					Bomba* newBomba = new Bomba();
-					newBomba->init(bombPos, texProgram);
-
-					activeBombs.push_back(newBomba);
-					player->registerBomb();
-				}
-
+	if (state == GameState::MENU) {
+		if (Game::instance().getKey(GLFW_KEY_ENTER)) {
+			if (menu_state == 0) {
+				init_level(1);
 			}
-		}
-	}
-	else {
-		dropBombKeyPressed = false;
-	}
-
-	// Actualizar enemigos
-	for (auto it = activeEnemys.begin(); it != activeEnemys.end(); ) {
-		(*it)->update(deltaTime, map);
-
-		// Daño al jugador
-		if ((*it)->checkCollision(player->getPosition(), glm::ivec2(16, 16))) {
-			player->die(false);
-		}
-
-		if (!(*it)->isAlive()) {
-			delete* it;
-			it = activeEnemys.erase(it);
-		}
-		else {
-			++it;
+			else state = GameState::GAME;
 		}
 	}
 
-	// Actualizar bombas activas
-	for (auto it = activeBombs.begin(); it != activeBombs.end();) {
-		(*it)->updatePlayerOverlap(player->getPosition(), glm::ivec2(16, 16), map->getTileSize());
+	else if (state == GameState::GAME) {
 
-		(*it)->update(deltaTime);
-
-		if ((*it)->isExploded()) {
-			player->onBombExploded();
-
-			Explosion* expl = new Explosion();
-			expl->init((*it)->getTilePos(), player->getExplosionRadius(), texProgram, map);
-			activeExplosions.push_back(expl);
-
-			delete* it;
-			it = activeBombs.erase(it);
+		// Spawneamos todos los powerups que se hayan descubierto.
+		std::queue<EntitySpawn> powers = map->getPowerUpSpawns();
+		while (!powers.empty()) {
+			spawnPower(powers.front());
+			powers.pop();			
 		}
-		else {
-			++it;
-		}
-	}
+		map->resetPowers();
 
-	// Actualizar explosiones
-	for (auto it = activeExplosions.begin(); it != activeExplosions.end();) {
-		(*it)->update(deltaTime);
+		// Si el player quiere poner bomba
+		if (player->wantsToGenerateABomb()) {
+			if (!dropBombKeyPressed) {
+				dropBombKeyPressed = true; // Bloquea la creación hasta soltar la tecla
 
-		// Deteccion daño player
-		if ((*it)->hitsTile(player->getBombTilePosition(map->getTileSize()))) {
-			player->die(true);
-		}
+				if (player->canDropBomb()) {
+					glm::ivec2 bombPos = player->getBombTilePosition(map->getTileSize());
 
-		// Daño al enemigo por explosiones
-		for (Enemy* e : activeEnemys) {
-			if (!e->isReallyAlive()) continue;
+					// Comprobar no haya otra en el sitio ya
+					bool canBomb = true;
+					for (Bomba* bomb : activeBombs) if (bomb->getTilePos() == bombPos) canBomb = false;
 
-			// Comprobamos si alguno de los tiles que ocupa el enemigo es alcanzado por la explosión
-			const auto occupiedTiles = e->getOccupiedTilePositions(map->getTileSize()); // para los imprecisos
-			for (const glm::ivec2& tilePixelPos : occupiedTiles) {
-				if ((*it)->hitsTile(tilePixelPos)) {
-					e->kill();
-					--enemies;
-					cout << enemies << endl;
-					break;
+					if (canBomb) {
+						Bomba* newBomba = new Bomba();
+						newBomba->init(bombPos, texProgram);
+
+						activeBombs.push_back(newBomba);
+						player->registerBomb();
+					}
+
 				}
 			}
 		}
-
-		if ((*it)->isFinished()) {
-			delete* it;
-			it = activeExplosions.erase(it);
-		}
-		else ++it;
-	}
-
-	// Poderes
-	for (auto it = activePowerUps.begin(); it != activePowerUps.end(); ) {
-		(*it)->update(deltaTime);
-
-		if ((*it)->checkCollision(player->getPosition())) {
-			(*it)->applyEffect(player);
-
-			delete* it;
-			it = activePowerUps.erase(it);
-		}
 		else {
-			++it;
+			dropBombKeyPressed = false;
 		}
-	}
 
-	// Muerte -> faltara cambiarlo para enseñar el game over bien i demas
-	if (player->isDeathAnimationFinished()) {
-		if (player->getVidas() <= 0) {
-			std::cout << "Game Over" << std::endl;
-			exit(0);
-		}
-		else {
-			restartLevel(level);
-		}
-	}
+		// Actualizar enemigos
+		for (auto it = activeEnemys.begin(); it != activeEnemys.end(); ) {
+			(*it)->update(deltaTime, map, player->getPosition());
 
-	// Puerta
-	if (enemies == 0) {
-		map->open_door();
-		if (map->doorCollision(player->getPosition())) {
-			++level;
-			menu = true;
-			menu_state = level;
-			restartLevel(level);
-		}
-	}
+			// Daño al jugador
+			if ((*it)->checkCollision(player->getPosition(), glm::ivec2(16, 16))) {
+				player->die(false);
+			}
 
-	player->update(deltaTime);
-	// Para debug
-	if (Game::instance().getKey(GLFW_KEY_J)){
-		cout << "x: " << player->getPosition().x << ", y: " << player->getPosition().y << endl;
+			if (!(*it)->isAlive()) {
+				delete* it;
+				it = activeEnemys.erase(it);
+			}
+			else {
+				++it;
+			}
+		}
+
+		// Actualizar bombas activas
+		for (auto it = activeBombs.begin(); it != activeBombs.end();) {
+			(*it)->updatePlayerOverlap(player->getPosition(), glm::ivec2(16, 16), map->getTileSize());
+
+			(*it)->update(deltaTime);
+
+			if ((*it)->isExploded()) {
+				player->onBombExploded();
+
+				Explosion* expl = new Explosion();
+				expl->init((*it)->getTilePos(), player->getExplosionRadius(), texProgram, map);
+				activeExplosions.push_back(expl);
+
+				delete* it;
+				it = activeBombs.erase(it);
+			}
+			else {
+				++it;
+			}
+		}
+
+		// Actualizar explosiones
+		for (auto it = activeExplosions.begin(); it != activeExplosions.end();) {
+			(*it)->update(deltaTime);
+
+			// Deteccion daño player
+			if ((*it)->hitsTile(player->getBombTilePosition(map->getTileSize()))) {
+				player->die(true);
+			}
+
+			// Daño al enemigo por explosiones
+			for (Enemy* e : activeEnemys) {
+				if (!e->isReallyAlive()) continue;
+
+				// Comprobamos si alguno de los tiles que ocupa el enemigo es alcanzado por la explosión
+				const auto occupiedTiles = e->getOccupiedTilePositions(map->getTileSize()); // para los imprecisos
+				for (const glm::ivec2& tilePixelPos : occupiedTiles) {
+					if ((*it)->hitsTile(tilePixelPos)) {
+						e->kill();
+						--enemies;
+						cout << enemies << endl;
+						break;
+					}
+				}
+			}
+
+			if ((*it)->isFinished()) {
+				delete* it;
+				it = activeExplosions.erase(it);
+			}
+			else ++it;
+		}
+
+		// Poderes
+		for (auto it = activePowerUps.begin(); it != activePowerUps.end(); ) {
+			(*it)->update(deltaTime);
+
+			if ((*it)->checkCollision(player->getPosition())) {
+				(*it)->applyEffect(player);
+
+				delete* it;
+				it = activePowerUps.erase(it);
+			}
+			else {
+				++it;
+			}
+		}
+
+		// Muerte -> faltara cambiarlo para enseñar el game over bien i demas
+		if (player->isDeathAnimationFinished()) {
+			if (player->getVidas() <= 0) {
+				std::cout << "Game Over" << std::endl;
+				exit(0);
+			}
+			else {
+				init_level(level);
+			}
+		}
+
+		// Puerta
+		if (enemies == 0) {
+			map->open_door();
+			if (map->doorCollision(player->getPosition())) {
+				++level;
+				init_level(level);
+			}
+		}
+
+		player->update(deltaTime);
+		// Para debug
+		if (Game::instance().getKey(GLFW_KEY_J)) {
+			cout << "x: " << player->getPosition().x << ", y: " << player->getPosition().y << endl;
+		}
+		updateCamera();
 	}
-	updateCamera();
 }
 
 void Scene::render(){
 
-	if (menu) {
+	if (state == GameState::MENU) {
 		Menu actual(menu_state, texProgram);
 		texProgram.use();
 		texProgram.setUniformMatrix4f("projection", glm::mat4(1.0f));
@@ -313,35 +357,35 @@ void Scene::render(){
 		texProgram.setUniformMatrix4f("modelview", glm::mat4(1.0f));
 		texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 		actual.render();
-		return;
 	}
+	else if (state == GameState::GAME) {
+		// Camara respecto size virtual
+		projection = glm::ortho(cameraPos.x, cameraPos.x + VIRTUAL_WIDTH,
+			cameraPos.y + VIRTUAL_HEIGHT, cameraPos.y);
+		glm::mat4 modelview;
 
-	// Camara respecto size virtual
-	projection = glm::ortho(cameraPos.x, cameraPos.x + VIRTUAL_WIDTH,
-		cameraPos.y + VIRTUAL_HEIGHT, cameraPos.y);
-	glm::mat4 modelview;
+		texProgram.use();
+		texProgram.setUniformMatrix4f("projection", projection);
+		texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+		modelview = glm::mat4(1.0f);
+		texProgram.setUniformMatrix4f("modelview", modelview);
+		texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+		map->render();
 
-	texProgram.use();
-	texProgram.setUniformMatrix4f("projection", projection);
-	texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
-	modelview = glm::mat4(1.0f);
-	texProgram.setUniformMatrix4f("modelview", modelview);
-	texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-	map->render();
+		// Bombas
+		for (Bomba* bomb : activeBombs) { bomb->render(); }
 
-	// Bombas
-	for (Bomba* bomb : activeBombs){ bomb->render(); }
+		// Explosiones
+		for (Explosion* expl : activeExplosions) { expl->render(); }
 
-	// Explosiones
-	for (Explosion* expl : activeExplosions) { expl->render(); }
+		// Power Ups
+		for (PowerUp* pUp : activePowerUps) { pUp->render(); }
 
-	// Power Ups
-	for (PowerUp* pUp : activePowerUps) { pUp->render(); }
+		//Enemigos
+		for (Enemy* enemy : activeEnemys) { enemy->render(); }
 
-	//Enemigos
-	for (Enemy* enemy : activeEnemys) { enemy->render(); }
-
-	player->render();
+		player->render();
+	}
 }
 
 // FUNCIONES AUXILIARES
@@ -379,27 +423,6 @@ void Scene::updateCamera(){
 	cameraPos.y = glm::clamp(cameraPos.y, float(SCREEN_Y), maxCamY);
 }
 
-// Niveles
-void Scene::restartLevel(int i) {
-	level = i;
-	// Reset Bombas
-	for (Bomba* bomb : activeBombs) delete bomb;
-	activeBombs.clear();
-	for (Explosion* expl : activeExplosions) delete expl;
-	activeExplosions.clear();
-
-	// Reset enemigos
-	killAllEnemys();
-	for (Enemy* e : activeEnemys) delete e;
-	activeEnemys.clear();
-
-	// Reset tiempo
-
-	// Reset mapa y player
-	init(i);
-	player->reset();
-}
-
 // Trucos
 void Scene::setGodMode() { player->setGodMode(); }
 void Scene::killAllEnemys() {
@@ -412,19 +435,4 @@ void Scene::killAllEnemys() {
 
 void Scene::enemy_killed() {
 	--enemies;
-}
-
-void Scene::menu_control() {
-	if (menu_state == 0) {
-		++menu_state;
-		render();
-	}
-	else {
-		if (menu) {
-			menu = false;
-		}
-		else {
-			render();
-		}
-	}
 }

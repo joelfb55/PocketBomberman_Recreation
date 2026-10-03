@@ -42,7 +42,7 @@ void WalkerEnemy::init(const glm::vec2& pos, const glm::ivec2& tileMapDispl, Sha
     Su rutina de movimiento se vera parada por un cierto tiempo al llegar al limite de la 
     plataforma o al colisionar con algo (ya sea una bomba o una pared).
 */
-void WalkerEnemy::updateLogic(int deltaTime, TileMap* map) {
+void WalkerEnemy::updateLogic(int deltaTime, TileMap* map, glm::vec2 player_pos) {
     if (pauseTimer > 0.0f) {
         pauseTimer -= deltaTime;
         applyGravity(map);

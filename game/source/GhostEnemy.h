@@ -12,16 +12,15 @@ public:
 
 protected:
     // FUNCIONES DE JUEGO
-    void updateLogic(int deltaTime, TileMap* map) override;
+    void updateLogic(int deltaTime, TileMap* map, glm::vec2 player_pos) override;
 
 private:
-    // FUNCIONES AUXILIARES
-    void applyGravity(TileMap* map);
+
+    float my_rand();
 
 private:
     // Atributos
-    float pauseTimer = 0.0f;
-    bool movingRight = true;
+    glm::vec2 random_direction;
 };
 
 #endif

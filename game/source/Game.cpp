@@ -9,7 +9,7 @@
 void Game::init(){
 	bPlay = true;
 	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
-	scene.init(1);
+	scene.init();
 }
 
 bool Game::update(int deltaTime){
@@ -34,17 +34,15 @@ void Game::keyPressed(int key)
 	if (key == GLFW_KEY_K)
 		scene.killAllEnemys();
 	if (key == GLFW_KEY_1)
-		scene.restartLevel(1);
+		scene.init_level(1);
 	if (key == GLFW_KEY_2)
-		scene.restartLevel(2);
+		scene.init_level(2);
 	if (key == GLFW_KEY_3)
-		scene.restartLevel(3);
+		scene.init_level(3);
 	if (key == GLFW_KEY_4)
-		scene.restartLevel(4);
+		scene.init_level(4);
 	if (key == GLFW_KEY_5)
-		scene.restartLevel(5);
-	if (key == GLFW_KEY_ENTER)
-		scene.menu_control();
+		scene.init_level(5);
 	keys[key] = true;
 }
 

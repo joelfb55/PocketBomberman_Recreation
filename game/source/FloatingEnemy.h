@@ -12,7 +12,7 @@ public:
 
 protected:
     // FUNCIONES DE JUEGO
-    void updateLogic(int deltaTime, TileMap* map) override;
+    void updateLogic(int deltaTime, TileMap* map, glm::vec2 player_pos) override;
 
 private:
     // Estados

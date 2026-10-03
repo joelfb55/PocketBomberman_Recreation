@@ -39,7 +39,7 @@ void FloatingEnemy::init(const glm::vec2& pos, const glm::ivec2& tileMapDispl, S
 }
 
 // FUNCIONES DE JUEGO
-void FloatingEnemy::updateLogic(int deltaTime, TileMap* map) {
+void FloatingEnemy::updateLogic(int deltaTime, TileMap* map, glm::vec2 player_pos) {
     constexpr float PI = 3.14159265359f;
     constexpr float TWO_PI = 6.28318530718f;
 

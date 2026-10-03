@@ -3,16 +3,16 @@
 
 
 #include <glm/glm.hpp>
+#include <queue>
 #include "Texture.h"
 #include "ShaderProgram.h"
 #include "Bomba.h"
-
 
 // Class Tilemap is capable of loading a tile map from a text file in a very
 // simple format (see level01.txt for an example). With this information
 // it builds a single VBO that contains all tiles. As a result the render
 // method draws the whole map independently of what is visible.
-enum EntityType{PLAYER_SPAWN, WALKER_ENEMY, FLOATING_ENEMY, GHOST_ENEMY, BOMB_UP, FIRE_UP};
+enum EntityType{NOTHING, PLAYER_SPAWN, WALKER_ENEMY, FLOATING_ENEMY, GHOST_ENEMY, BOMB_UP, FIRE_UP};
 struct EntitySpawn {
 	EntityType type;
 	glm::ivec2 tileCoords;
@@ -52,6 +52,8 @@ public:
 
 	//---
 	const std::vector<EntitySpawn>& getEntitySpawns() const;
+	const std::queue<EntitySpawn>& getPowerUpSpawns() const;
+	void resetPowers();
 	
 private:
 	bool loadLevel(const string &levelFile);
@@ -63,6 +65,7 @@ private:
 	
 	//---
 	std::vector<EntitySpawn> spawns;
+	std::queue<EntitySpawn> powerUpSpawns;
 
 	//---
 	void rebuildVBO();
@@ -77,6 +80,7 @@ private:
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
 	int *map;
+	EntityType *powerups;
 
 	//----
 	const std::vector<Bomba*>* activeBombs = nullptr;
