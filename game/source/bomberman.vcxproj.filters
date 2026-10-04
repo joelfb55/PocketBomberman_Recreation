@@ -31,9 +31,6 @@
     <ClCompile Include="Texture.cpp">
       <Filter>Archivos de código fuente\General</Filter>
     </ClCompile>
-    <ClCompile Include="TileMap.cpp">
-      <Filter>Archivos de código fuente\General</Filter>
-    </ClCompile>
     <ClCompile Include="Bomba.cpp">
       <Filter>Archivos de código fuente\Player</Filter>
     </ClCompile>
@@ -60,6 +57,21 @@
     </ClCompile>
     <ClCompile Include="GhostEnemy.cpp">
       <Filter>Archivos de código fuente\Enemigos</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Archivos de código fuente\General</Filter>
+    </ClCompile>
+    <ClCompile Include="Info.cpp">
+      <Filter>Archivos de código fuente\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Archivos de código fuente\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="Heart.cpp">
+      <Filter>Archivos de código fuente\PowerUps</Filter>
+    </ClCompile>
+    <ClCompile Include="RemoteController.cpp">
+      <Filter>Archivos de código fuente\PowerUps</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -117,6 +129,18 @@
     <ClInclude Include="GhostEnemy.h">
       <Filter>Archivos de encabezado\Enemigos</Filter>
     </ClInclude>
+    <ClInclude Include="Info.h">
+      <Filter>Archivos de encabezado\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>Archivos de encabezado\HUD</Filter>
+    </ClInclude>
+    <ClInclude Include="Heart.h">
+      <Filter>Archivos de encabezado\PowerUps</Filter>
+    </ClInclude>
+    <ClInclude Include="RemoteController.h">
+      <Filter>Archivos de encabezado\PowerUps</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Archivos de código fuente">
@@ -148,6 +172,12 @@
     </Filter>
     <Filter Include="Archivos de encabezado\PowerUps">
       <UniqueIdentifier>{1fb51aab-79ff-4d5b-95af-c045ad727526}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de código fuente\HUD">
+      <UniqueIdentifier>{f6f1d548-c2f5-4c4e-a133-ab1ae22d598b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\HUD">
+      <UniqueIdentifier>{c6648d4b-3d4c-435f-95e1-d1e0cc47ab69}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -20,35 +20,43 @@
     <ClInclude Include="FloatingEnemy.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GhostEnemy.h" />
+    <ClInclude Include="Heart.h" />
+    <ClInclude Include="Info.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PowerUp.h" />
+    <ClInclude Include="RemoteController.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Texture.h" />
     <ClInclude Include="TileMap.h" />
+    <ClInclude Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Bomba.cpp" />
     <ClCompile Include="BombUp.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Explosion.cpp" />
+    <ClCompile Include="Heart.cpp" />
     <ClCompile Include="FireUp.cpp" />
     <ClCompile Include="FloatingEnemy.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GhostEnemy.cpp" />
+    <ClCompile Include="Info.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PowerUp.cpp" />
+    <ClCompile Include="RemoteController.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TileMap.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="WalkerEnemy.cpp" />
     <ClCompile Include="WalkerEnemy.h" />
   </ItemGroup>

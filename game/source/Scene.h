@@ -17,6 +17,7 @@
 
 
 enum class GameState { MENU, GAME };
+enum class MenuState { MAIN, LVL1, LVL2, LVL3, LVL4, LVL5, GAMEOVER };
 
 class Scene
 {
@@ -70,7 +71,7 @@ private:
 
 	int level;
 	int enemies;
-	int menu_state;
+	int menu_state; // 6 = Game Over, 0 = main menu
 	GameState state;
 
 };

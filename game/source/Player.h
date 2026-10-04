@@ -31,12 +31,15 @@ public:
 
 	void addMaxBomb();
 	void addExplosionRadius();
+	void activateHeart();
+	void activateRemote();
 
-	void die(bool by_bomb);
+	void die(bool by_bomb, int deltaTime);
 	bool isDead() const;
 	bool isDeathAnimationFinished() const;
 	int getVidas() const;
 	void reset();
+	void gameOverReset();
 
 	glm::vec2 getPosition();
 	int getExplosionRadius();
@@ -56,6 +59,7 @@ private:
 	bool bJumping = false;
 	bool bDead = false;
 	bool godMode = false;
+	bool remoteExplosion;
 
 	// Atributos
 	int jumpAngle, startY;
@@ -63,6 +67,10 @@ private:
 	int activeBombs = 0;
 	int maxBombs = 1;
 	int explosionRadius = 1;
+
+	bool heart;
+	bool immunity;
+	float heart_immunity;
 
 	int vidas = 3;
 	float deathTimer = 0.f;

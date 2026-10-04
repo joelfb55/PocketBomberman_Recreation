@@ -77,7 +77,7 @@ bool TileMap::loadLevel(const string &levelFile){
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 	
 	map = new int[mapSize.x * mapSize.y];
-	powerups = new EntityType[mapSize.x * mapSize.y];
+	powerups = new EntityType[mapSize.x * mapSize.y, EntityType::NOTHING];
 	for(int j=0; j<mapSize.y; j++)
 	{
 		for(int i=0; i<mapSize.x; i++)
@@ -118,14 +118,20 @@ bool TileMap::loadLevel(const string &levelFile){
 
 			// PowerUps
 			else if (tile == 'B') {
-				//spawn.type = EntityType::BOMB_UP;
 				map[j * mapSize.x + i] = 8;
 				powerups[j * mapSize.x + i] = EntityType::BOMB_UP;
 			}
 			else if (tile == 'F') {
-				//spawn.type = EntityType::FIRE_UP;
 				map[j * mapSize.x + i] = 8;
 				powerups[j * mapSize.x + i] = EntityType::FIRE_UP;
+			}
+			else if (tile == 'H') {
+				map[j * mapSize.x + i] = 8;
+				powerups[j * mapSize.x + i] = EntityType::HEART;
+			}
+			else if (tile == 'R') {
+				map[j * mapSize.x + i] = 8;
+				powerups[j * mapSize.x + i] = EntityType::REMOTE_CONTROLLER;
 			}
 
 		}
@@ -319,13 +325,13 @@ void TileMap::open_door() {
 bool TileMap::destroyTile(int tileX, int tileY) {
 	if (isDestructibleTile(tileX, tileY)) {
 		map[tileY * mapSize.x + tileX] = 0;
-		rebuildVBO();
 		if (powerups[tileY * mapSize.x + tileX] != EntityType::NOTHING) {
 			EntitySpawn spawn;
 			spawn.tileCoords = glm::ivec2(tileX, tileY);
 			spawn.type = powerups[tileY * mapSize.x + tileX];
 			powerUpSpawns.push(spawn);
 		}
+		rebuildVBO();
 		return true;
 	}
 	return false;

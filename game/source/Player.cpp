@@ -12,6 +12,8 @@
 #define FALL_STEP 4
 #define JUMP_HEIGHT 3*16		// bloques * pixeles_bloque
 
+#define HEART_IMMUNITY_TIME 1000.f
+
 #define DEATH_ANIMATION_TIME 1000.f
 
 // FUNCIONES DE OBJETO
@@ -26,6 +28,8 @@ Player::~Player(){
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram){
 	bJumping = false;
 	bDead = false;
+	heart_immunity = 0.f;
+	remoteExplosion = false;
 
 	// Cargar textura
 	spritesheet.loadFromFile("images/bomberman.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -85,6 +89,16 @@ void Player::update(int deltaTime){
 	if (bDead) {
 		deathTimer -= float(deltaTime);
 		return;
+	}
+
+	if (immunity) {
+		if (heart_immunity > HEART_IMMUNITY_TIME) {
+			heart_immunity = 0;
+			immunity = false;
+		}
+		else {
+			heart_immunity += deltaTime;
+		}
 	}
 
 	// Movimiento
@@ -206,12 +220,19 @@ void Player::onBombExploded() { activeBombs = glm::max(0, activeBombs - 1); }
 // Poderes
 void Player::addMaxBomb() { maxBombs++; }
 void Player::addExplosionRadius() { explosionRadius++; }
+void Player::activateHeart() { heart = true; }
+void Player::activateRemote() { remoteExplosion = true; };
+
 
 // Vidas
-void Player::die(bool by_bomb) {
-	if (godMode) return;
+void Player::die(bool by_bomb, int deltaTime) {
+	if (godMode || immunity) return;
 	if (bDead) return;
-
+	if (heart) {
+		immunity = true;
+		heart = false;
+		return;
+	}
 	bDead = true;
 	vidas--;
 	deathTimer = DEATH_ANIMATION_TIME;
@@ -226,9 +247,18 @@ void Player::reset() {
 	bDead = false;
 	bJumping = false;
 	activeBombs = 0;
+	sprite->changeAnimation(STAND);
+}
+
+
+void Player::gameOverReset() {
+	reset();
 	maxBombs = 1;
 	explosionRadius = 1;
-	sprite->changeAnimation(STAND);
+	vidas = 3;
+	heart = false;
+	heart_immunity = 0;
+	remoteExplosion = false;
 }
 
 

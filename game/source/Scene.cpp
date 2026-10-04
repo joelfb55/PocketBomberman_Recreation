@@ -4,6 +4,8 @@
 #include "Scene.h"
 #include "Game.h"
 #include "Menu.h"
+#include "Heart.h"
+#include "RemoteController.h"
 
 
 #define SCREEN_X 16
@@ -97,7 +99,8 @@ void Scene::init_level(int i) {
 	activeEnemys.clear();
 
 	// Reset PowerUps
-
+	for (PowerUp* p : activePowerUps) delete p;
+	activePowerUps.clear();
 
 	level = i;
 	menu_state = i;
@@ -178,6 +181,18 @@ void Scene::spawnPower(EntitySpawn spawn) {
 		activePowerUps.push_back(power);
 		break;
 	}
+	case EntityType::HEART: {
+		Heart* power = new Heart();
+		power->init(pixelPos, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		activePowerUps.push_back(power);
+		break;
+	}
+	case EntityType::REMOTE_CONTROLLER: {
+		RemoteController* power = new RemoteController();
+		power->init(pixelPos, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+		activePowerUps.push_back(power);
+		break;
+	}
 	}
 }
 
@@ -190,6 +205,10 @@ void Scene::update(int deltaTime) {
 		if (Game::instance().getKey(GLFW_KEY_ENTER)) {
 			if (menu_state == 0) {
 				init_level(1);
+			}
+			else if (menu_state == 6) {
+				menu_state = 0;
+				level = 1;
 			}
 			else state = GameState::GAME;
 		}
@@ -238,7 +257,7 @@ void Scene::update(int deltaTime) {
 
 			// Daño al jugador
 			if ((*it)->checkCollision(player->getPosition(), glm::ivec2(16, 16))) {
-				player->die(false);
+				player->die(false, deltaTime);
 			}
 
 			if (!(*it)->isAlive()) {
@@ -277,7 +296,7 @@ void Scene::update(int deltaTime) {
 
 			// Deteccion daño player
 			if ((*it)->hitsTile(player->getBombTilePosition(map->getTileSize()))) {
-				player->die(true);
+				player->die(true, deltaTime);
 			}
 
 			// Daño al enemigo por explosiones
@@ -322,7 +341,9 @@ void Scene::update(int deltaTime) {
 		if (player->isDeathAnimationFinished()) {
 			if (player->getVidas() <= 0) {
 				std::cout << "Game Over" << std::endl;
-				exit(0);
+				state = GameState::MENU;
+				menu_state = 6;
+				player->gameOverReset();
 			}
 			else {
 				init_level(level);
@@ -339,6 +360,7 @@ void Scene::update(int deltaTime) {
 		}
 
 		player->update(deltaTime);
+
 		// Para debug
 		if (Game::instance().getKey(GLFW_KEY_J)) {
 			cout << "x: " << player->getPosition().x << ", y: " << player->getPosition().y << endl;
