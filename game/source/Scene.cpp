@@ -6,6 +6,7 @@
 #include "Menu.h"
 #include "Heart.h"
 #include "RemoteController.h"
+#include "Boss.h"
 
 
 #define SCREEN_X 16
@@ -48,6 +49,8 @@ Scene::~Scene(){
 		delete e;
 	}
 	activeEnemys.clear();
+
+	delete boss;
 }
 
 void Scene::init(){
@@ -87,6 +90,7 @@ void Scene::initShaders() {
 }
 
 void Scene::init_level(int i) {
+
 	// Reset Bombas
 	for (Bomba* bomb : activeBombs) delete bomb;
 	activeBombs.clear();
@@ -106,6 +110,7 @@ void Scene::init_level(int i) {
 	menu_state = i;
 	state = GameState::MENU;
 	enemies = 0;
+	activeBoss = false;
 
 	// Mapa
 	map = TileMap::createTileMap("levels/level" + to_string(i) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -149,6 +154,12 @@ void Scene::init_level(int i) {
 			enemy1->init(pixelPos, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
 			activeEnemys.push_back(enemy1);
 			++enemies;
+			break;
+		}
+		case EntityType::BOSS: {
+			boss = new Boss();
+			boss->init(pixelPos, glm::ivec2(SCREEN_X, SCREEN_Y), texProgram);
+			activeBoss = true;
 			break;
 		}
 		}
@@ -322,6 +333,11 @@ void Scene::update(int deltaTime) {
 			else ++it;
 		}
 
+		// Boss
+		if (activeBoss) {
+			boss->update(deltaTime, map, player->getPosition());
+		}
+
 		// Poderes
 		for (auto it = activePowerUps.begin(); it != activePowerUps.end(); ) {
 			(*it)->update(deltaTime);
@@ -405,6 +421,11 @@ void Scene::render(){
 
 		//Enemigos
 		for (Enemy* enemy : activeEnemys) { enemy->render(); }
+
+		// Boss
+		if (activeBoss) {
+			boss->render();
+		}
 
 		player->render();
 	}

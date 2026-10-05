@@ -104,7 +104,7 @@ bool TileMap::loadLevel(const string &levelFile){
 			}
 
 			// Entidades
-			else if (tile == 'G' || tile == 'W' || tile == 'Y' || tile == 'P') {
+			else if (tile == 'G' || tile == 'W' || tile == 'Y' || tile == 'P' || tile == 'O') {
 				map[j * mapSize.x + i] = 0;
 				EntitySpawn spawn;
 				spawn.tileCoords = glm::ivec2(i, j);
@@ -113,6 +113,7 @@ bool TileMap::loadLevel(const string &levelFile){
 				else if (tile == 'Y') spawn.type = EntityType::FLOATING_ENEMY;
 				else if (tile == 'G') spawn.type = EntityType::GHOST_ENEMY;
 				else if (tile == 'P') spawn.type = EntityType::PLAYER_SPAWN;
+				else if (tile == 'O') spawn.type = EntityType::BOSS;
 				spawns.push_back(spawn);
 			}
 
@@ -133,6 +134,7 @@ bool TileMap::loadLevel(const string &levelFile){
 				map[j * mapSize.x + i] = 8;
 				powerups[j * mapSize.x + i] = EntityType::REMOTE_CONTROLLER;
 			}
+
 
 		}
 		fin.get(tile);

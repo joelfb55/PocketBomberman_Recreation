@@ -14,6 +14,7 @@
 #include "WalkerEnemy.h"
 #include "FloatingEnemy.h"
 #include "GhostEnemy.h"
+#include "Boss.h"
 
 
 enum class GameState { MENU, GAME };
@@ -63,6 +64,7 @@ private:
 	std::vector<Explosion*> activeExplosions;
 	std::vector<Enemy*> activeEnemys;
 	std::vector<PowerUp*> activePowerUps;
+	Boss* boss;
 
 	// Otros
 	bool dropBombKeyPressed = false;
@@ -71,6 +73,7 @@ private:
 
 	int level;
 	int enemies;
+	bool activeBoss;
 	int menu_state; // 6 = Game Over, 0 = main menu
 	GameState state;
 

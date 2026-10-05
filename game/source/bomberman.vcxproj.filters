@@ -73,6 +73,9 @@
     <ClCompile Include="RemoteController.cpp">
       <Filter>Archivos de código fuente\PowerUps</Filter>
     </ClCompile>
+    <ClCompile Include="Boss.cpp">
+      <Filter>Archivos de código fuente\Enemigos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h">
@@ -140,6 +143,9 @@
     </ClInclude>
     <ClInclude Include="RemoteController.h">
       <Filter>Archivos de encabezado\PowerUps</Filter>
+    </ClInclude>
+    <ClInclude Include="Boss.h">
+      <Filter>Archivos de encabezado\Enemigos</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

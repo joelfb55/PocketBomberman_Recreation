@@ -28,6 +28,7 @@ Player::~Player(){
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram){
 	bJumping = false;
 	bDead = false;
+	heart = false;
 	heart_immunity = 0.f;
 	remoteExplosion = false;
 
