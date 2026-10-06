@@ -15,6 +15,8 @@
 #include "FloatingEnemy.h"
 #include "GhostEnemy.h"
 #include "Boss.h"
+#include "Menu.h"
+#include "Cursor.h"
 
 
 enum class GameState { MENU, GAME };
@@ -70,6 +72,9 @@ private:
 	bool dropBombKeyPressed = false;
 	glm::vec2 cameraPos;
 	glm::vec2 playerSpawnPoint;
+
+	Menu* menu;
+	Cursor* cursor;
 
 	int level;
 	int enemies;

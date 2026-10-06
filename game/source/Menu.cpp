@@ -1,8 +1,14 @@
 #include <vector>
 #include "Menu.h"
 
-Menu::Menu(int i, ShaderProgram& program) {
-	image.loadFromFile("images/menu" + to_string(i) + ".png", TEXTURE_PIXEL_FORMAT_RGBA);
+
+Menu::~Menu() {
+	glDeleteVertexArrays(1, &vao);
+	glDeleteBuffers(1, &vbo);
+}
+
+void Menu::init(ShaderProgram& program) {
+	
 	vector<float> vertices;
 
 	// First triangle
@@ -30,11 +36,6 @@ Menu::Menu(int i, ShaderProgram& program) {
 	texCoordLocation = program.bindVertexAttribute("texCoord", 2, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 }
 
-Menu::~Menu() {
-	glDeleteVertexArrays(1, &vao);
-	glDeleteBuffers(1, &vbo);
-}
-
 void Menu::render() {
 	glEnable(GL_TEXTURE_2D);
 	image.use();
@@ -43,4 +44,8 @@ void Menu::render() {
 	glEnableVertexAttribArray(texCoordLocation);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 	glDisable(GL_TEXTURE_2D);
+}
+
+void Menu::setImage(int i) {
+	image.loadFromFile("images/menu" + to_string(i) + ".png", TEXTURE_PIXEL_FORMAT_RGBA);
 }

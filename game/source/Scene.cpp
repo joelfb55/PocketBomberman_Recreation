@@ -55,6 +55,11 @@ Scene::~Scene(){
 
 void Scene::init(){
 	initShaders();
+	menu = new Menu();
+	menu->init(texProgram);
+	menu->setImage(0);
+	cursor = new Cursor();
+	cursor->init();
 	state = GameState::MENU;
 	menu_state = 0;
 	level = 1;
@@ -108,6 +113,7 @@ void Scene::init_level(int i) {
 
 	level = i;
 	menu_state = i;
+	menu->setImage(i);
 	state = GameState::MENU;
 	enemies = 0;
 	activeBoss = false;
@@ -171,7 +177,7 @@ void Scene::init_level(int i) {
 	cameraPos.y = playerPos.y - (VIRTUAL_HEIGHT / 2.0f);
 
 	currentTime = 0.0f;
-	cout << enemies << endl;
+	//cout << enemies << endl;
 
 	player->reset();
 }
@@ -214,10 +220,13 @@ void Scene::update(int deltaTime) {
 
 	if (state == GameState::MENU) {
 		if (Game::instance().getKey(GLFW_KEY_ENTER)) {
+			std::cerr << menu_state << std::endl;
 			if (menu_state == 0) {
+				menu->setImage(1);
 				init_level(1);
 			}
 			else if (menu_state == 6) {
+				menu->setImage(0);
 				menu_state = 0;
 				level = 1;
 			}
@@ -356,9 +365,10 @@ void Scene::update(int deltaTime) {
 		// Muerte -> faltara cambiarlo para enseñar el game over bien i demas
 		if (player->isDeathAnimationFinished()) {
 			if (player->getVidas() <= 0) {
-				std::cout << "Game Over" << std::endl;
+				//std::cout << "Game Over" << std::endl;
 				state = GameState::MENU;
 				menu_state = 6;
+				menu->setImage(6);
 				player->gameOverReset();
 			}
 			else {
@@ -388,13 +398,15 @@ void Scene::update(int deltaTime) {
 void Scene::render(){
 
 	if (state == GameState::MENU) {
-		Menu actual(menu_state, texProgram);
-		texProgram.use();
 		texProgram.setUniformMatrix4f("projection", glm::mat4(1.0f));
 		texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 		texProgram.setUniformMatrix4f("modelview", glm::mat4(1.0f));
 		texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-		actual.render();
+		texProgram.use();		
+		menu->render();
+		if (menu_state == 0) {
+			//cursor->render();
+		}
 	}
 	else if (state == GameState::GAME) {
 		// Camara respecto size virtual

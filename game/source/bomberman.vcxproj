@@ -15,6 +15,7 @@
     <ClInclude Include="Bomba.h" />
     <ClInclude Include="BombUp.h" />
     <ClInclude Include="Boss.h" />
+    <ClInclude Include="Cursor.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Explosion.h" />
     <ClInclude Include="FireUp.h" />
@@ -39,6 +40,7 @@
     <ClCompile Include="Bomba.cpp" />
     <ClCompile Include="BombUp.cpp" />
     <ClCompile Include="Boss.cpp" />
+    <ClCompile Include="Cursor.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Explosion.cpp" />
     <ClCompile Include="Heart.cpp" />
@@ -73,7 +75,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">

@@ -100,7 +100,7 @@ bool TileMap::loadLevel(const string &levelFile){
 				door_offset = j * mapSize.x + i;
 				door_pixel[0] = i * tileSize;
 				door_pixel[1] = j * tileSize;
-				cout << door_pixel[0] << " " << door_pixel[1] << endl;
+				//cout << door_pixel[0] << " " << door_pixel[1] << endl;
 			}
 
 			// Entidades

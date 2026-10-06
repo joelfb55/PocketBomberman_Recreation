@@ -24,6 +24,7 @@ void Game::render()
 	scene.render();
 }
 
+#include<iostream>
 void Game::keyPressed(int key)
 {
 	if(key == GLFW_KEY_ESCAPE) // Escape code
@@ -43,11 +44,13 @@ void Game::keyPressed(int key)
 		scene.init_level(4);
 	if (key == GLFW_KEY_5)
 		scene.init_level(5);
+	std::cerr << "pressed " << key << std::endl;
 	keys[key] = true;
 }
 
 void Game::keyReleased(int key)
 {
+	std::cerr << "released " << key << std::endl;
 	keys[key] = false;
 }
 

@@ -9,10 +9,11 @@
 class Menu 
 {
 public:
-	Menu(int i, ShaderProgram& program);
 	~Menu();
 
+	void init(ShaderProgram& program);
 	void render();
+	void setImage(int i);
 
 private:
 	GLuint vao;
