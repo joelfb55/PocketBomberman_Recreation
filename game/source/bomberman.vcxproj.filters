@@ -58,13 +58,7 @@
     <ClCompile Include="GhostEnemy.cpp">
       <Filter>Archivos de código fuente\Enemigos</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Archivos de código fuente\General</Filter>
-    </ClCompile>
     <ClCompile Include="Info.cpp">
-      <Filter>Archivos de código fuente\HUD</Filter>
-    </ClCompile>
-    <ClCompile Include="TileMap.cpp">
       <Filter>Archivos de código fuente\HUD</Filter>
     </ClCompile>
     <ClCompile Include="Heart.cpp">
@@ -75,6 +69,12 @@
     </ClCompile>
     <ClCompile Include="Boss.cpp">
       <Filter>Archivos de código fuente\Enemigos</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>Archivos de código fuente\HUD</Filter>
+    </ClCompile>
+    <ClCompile Include="TileMap.cpp">
+      <Filter>Archivos de código fuente\General</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

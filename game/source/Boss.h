@@ -4,10 +4,12 @@
 
 #include <cmath>
 #include <glm/glm.hpp>
+#include <ctime>
+#include <random>
 #include "Sprite.h"
 #include "TileMap.h"
 
-enum class BossState { ALIVE, DYING, DEAD };
+enum class BossState { MOVING, ATTACK1, DYING, DEAD };
 
 class Boss {
 public:
@@ -37,7 +39,9 @@ private:
     // Atributos
     glm::vec2 position;
     BossState state;
-
+    glm::vec2 direction;
+    int time_next_attack;
+    int attacking_time;
     //float deathTimer = 0.f;
 
 };
