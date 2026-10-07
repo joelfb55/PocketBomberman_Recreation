@@ -60,8 +60,11 @@ void Scene::init(){
 	menu->setImage(0);
 	cursor = new Cursor();
 	cursor->init();
+	info = new Info();
+	info->init(texProgram);
 	state = GameState::MENU;
-	menu_state = 0;
+	menu_state = MenuState::MAIN;
+	menuCanChange = true;
 	level = 1;
 }
 
@@ -94,6 +97,17 @@ void Scene::initShaders() {
 	fShader.free();
 }
 
+
+MenuState Scene::lvl2menu(int i) {
+	switch (i) {
+	case 1: return MenuState::LVL1;
+	case 2: return MenuState::LVL2;
+	case 3: return MenuState::LVL3;
+	case 4: return MenuState::LVL4;
+	case 5: return MenuState::LVLBOSS;
+	}
+}
+
 void Scene::init_level(int i) {
 
 	// Reset Bombas
@@ -112,7 +126,7 @@ void Scene::init_level(int i) {
 	activePowerUps.clear();
 
 	level = i;
-	menu_state = i;
+	menu_state = lvl2menu(i);
 	menu->setImage(i);
 	state = GameState::MENU;
 	enemies = 0;
@@ -219,22 +233,27 @@ void Scene::update(int deltaTime) {
 	currentTime += deltaTime;
 
 	if (state == GameState::MENU) {
-		if (Game::instance().getKey(GLFW_KEY_ENTER)) {
-			std::cerr << menu_state << std::endl;
-			if (menu_state == 0) {
+		if (menu_state == MenuState::MAIN) cursor->update(deltaTime);
+		if (Game::instance().getKey(GLFW_KEY_ENTER) && menuCanChange) {
+			if (menu_state == MenuState::MAIN) {
 				menu->setImage(1);
 				init_level(1);
 			}
-			else if (menu_state == 6) {
+			else if (menu_state == MenuState::GAMEOVER) {
 				menu->setImage(0);
-				menu_state = 0;
+				menu_state = MenuState::MAIN;
 				level = 1;
 			}
 			else state = GameState::GAME;
+			menuCanChange = false;
 		}
+		if (!menuCanChange && !Game::instance().getKey(GLFW_KEY_ENTER)) menuCanChange = true;
 	}
 
 	else if (state == GameState::GAME) {
+
+		// Actualitzem HUD
+		info->update(deltaTime);
 
 		// Spawneamos todos los powerups que se hayan descubierto.
 		std::queue<EntitySpawn> powers = map->getPowerUpSpawns();
@@ -367,7 +386,7 @@ void Scene::update(int deltaTime) {
 			if (player->getVidas() <= 0) {
 				//std::cout << "Game Over" << std::endl;
 				state = GameState::MENU;
-				menu_state = 6;
+				menu_state = MenuState::GAMEOVER;
 				menu->setImage(6);
 				player->gameOverReset();
 			}
@@ -398,14 +417,14 @@ void Scene::update(int deltaTime) {
 void Scene::render(){
 
 	if (state == GameState::MENU) {
+		texProgram.use();
 		texProgram.setUniformMatrix4f("projection", glm::mat4(1.0f));
 		texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 		texProgram.setUniformMatrix4f("modelview", glm::mat4(1.0f));
 		texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
-		texProgram.use();		
 		menu->render();
-		if (menu_state == 0) {
-			//cursor->render();
+		if (menu_state == MenuState::MAIN) {
+			cursor->render();
 		}
 	}
 	else if (state == GameState::GAME) {
@@ -440,6 +459,9 @@ void Scene::render(){
 		}
 
 		player->render();
+
+		// HUD
+		info->render();
 	}
 }
 

@@ -31,6 +31,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram){
 	heart = false;
 	heart_immunity = 0.f;
 	remoteExplosion = false;
+	canJump = true;
 
 	// Cargar textura
 	spritesheet.loadFromFile("images/bomberman.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -178,12 +179,16 @@ void Player::update(int deltaTime){
 			}
 
 			// Si queremos saltar...
-			if(Game::instance().getKey(GLFW_KEY_UP)){
+			if(Game::instance().getKey(GLFW_KEY_X) && canJump){
 				bJumping = true;
 				jumpAngle = 0;
 				startY = posPlayer.y;
 				sprite->changeAnimation(JUMP);
+				canJump = false;
+			}
 
+			if (!canJump && !Game::instance().getKey(GLFW_KEY_X)) {
+				canJump = true;
 			}
 		}
 		// No estamos en el suelo
@@ -202,7 +207,7 @@ void Player::render(){
 
 // FUNCIONES AUXILIARES
 // Bombas (En orden de llamada)
-bool Player::wantsToGenerateABomb() const { return Game::instance().getKey(GLFW_KEY_X); }
+bool Player::wantsToGenerateABomb() const { return Game::instance().getKey(GLFW_KEY_Z); }
 bool Player::canDropBomb() const { return activeBombs < maxBombs; }
 glm::ivec2 Player::getBombTilePosition(int tileSize) const {
 	// Centro del sprite del jugador

@@ -63,6 +63,7 @@ private:
 
 	// Atributos
 	int jumpAngle, startY;
+	bool canJump;
 
 	int activeBombs = 0;
 	int maxBombs = 1;

@@ -10,6 +10,14 @@ Menu::~Menu() {
 void Menu::init(ShaderProgram& program) {
 	
 	vector<float> vertices;
+	
+	mainMenu.loadFromFile("images/menu0.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	Lvl1.loadFromFile("images/menu1.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	Lvl2.loadFromFile("images/menu2.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	Lvl3.loadFromFile("images/menu3.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	Lvl4.loadFromFile("images/menu4.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	LvlBoss.loadFromFile("images/menu5.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	gameOver.loadFromFile("images/menu6.png", TEXTURE_PIXEL_FORMAT_RGBA);
 
 	// First triangle
 	vertices.push_back(-1.f); vertices.push_back(-1.f);
@@ -38,7 +46,7 @@ void Menu::init(ShaderProgram& program) {
 
 void Menu::render() {
 	glEnable(GL_TEXTURE_2D);
-	image.use();
+	renderImage.use();
 	glBindVertexArray(vao);
 	glEnableVertexAttribArray(posLocation);
 	glEnableVertexAttribArray(texCoordLocation);
@@ -47,5 +55,34 @@ void Menu::render() {
 }
 
 void Menu::setImage(int i) {
-	image.loadFromFile("images/menu" + to_string(i) + ".png", TEXTURE_PIXEL_FORMAT_RGBA);
+	switch (i) {
+	case 0: {
+		renderImage = mainMenu;
+		break;
+	}
+	case 1: {
+		renderImage = Lvl1;
+		break;
+	}
+	case 2: {
+		renderImage = Lvl2;
+		break;
+	}
+	case 3: {
+		renderImage = Lvl3;
+		break;
+	}
+	case 4: {
+		renderImage = Lvl4;
+		break;
+	}
+	case 5: {
+		renderImage = LvlBoss;
+		break;
+	}
+	case 6: {
+		renderImage = gameOver;
+		break;
+	}
+	}
 }

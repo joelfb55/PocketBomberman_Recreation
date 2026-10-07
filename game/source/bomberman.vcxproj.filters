@@ -52,9 +52,6 @@
     <ClCompile Include="WalkerEnemy.h">
       <Filter>Archivos de encabezado\Enemigos</Filter>
     </ClCompile>
-    <ClCompile Include="Menu.cpp">
-      <Filter>Archivos de código fuente\General</Filter>
-    </ClCompile>
     <ClCompile Include="GhostEnemy.cpp">
       <Filter>Archivos de código fuente\Enemigos</Filter>
     </ClCompile>
@@ -76,8 +73,11 @@
     <ClCompile Include="TileMap.cpp">
       <Filter>Archivos de código fuente\General</Filter>
     </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Archivos de código fuente\Menus</Filter>
+    </ClCompile>
     <ClCompile Include="Cursor.cpp">
-      <Filter>Archivos de código fuente\General</Filter>
+      <Filter>Archivos de código fuente\Menus</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -129,9 +129,6 @@
     <ClInclude Include="TileMap.h">
       <Filter>Archivos de encabezado\General</Filter>
     </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>Archivos de encabezado\General</Filter>
-    </ClInclude>
     <ClInclude Include="GhostEnemy.h">
       <Filter>Archivos de encabezado\Enemigos</Filter>
     </ClInclude>
@@ -151,7 +148,10 @@
       <Filter>Archivos de encabezado\Enemigos</Filter>
     </ClInclude>
     <ClInclude Include="Cursor.h">
-      <Filter>Archivos de encabezado\General</Filter>
+      <Filter>Archivos de encabezado\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Archivos de encabezado\Menus</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -190,6 +190,12 @@
     </Filter>
     <Filter Include="Archivos de encabezado\HUD">
       <UniqueIdentifier>{c6648d4b-3d4c-435f-95e1-d1e0cc47ab69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de código fuente\Menus">
+      <UniqueIdentifier>{ea10e3e9-8741-407d-90ef-12c8fd39f1a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Archivos de encabezado\Menus">
+      <UniqueIdentifier>{ef95c563-b663-439d-94ef-f170d42f5dfe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

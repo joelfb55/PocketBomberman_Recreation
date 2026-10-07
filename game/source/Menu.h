@@ -19,7 +19,8 @@ private:
 	GLuint vao;
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
-	Texture image;
+	Texture renderImage;
+	Texture mainMenu, instructionsMenu, creditsMenu, Lvl1, Lvl2, Lvl3, Lvl4, LvlBoss, gameOver;
 };
 
 #endif

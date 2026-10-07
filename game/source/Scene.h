@@ -17,10 +17,11 @@
 #include "Boss.h"
 #include "Menu.h"
 #include "Cursor.h"
+#include "Info.h"
 
 
 enum class GameState { MENU, GAME };
-enum class MenuState { MAIN, LVL1, LVL2, LVL3, LVL4, LVL5, GAMEOVER };
+enum class MenuState { MAIN, LVL1, LVL2, LVL3, LVL4, LVLBOSS, GAMEOVER };
 
 class Scene
 {
@@ -49,6 +50,8 @@ private:
 
 	glm::vec2 getCameraPosition() const;
 	void updateCamera();
+
+	MenuState Scene::lvl2menu(int i);
 	
 	
 
@@ -73,13 +76,19 @@ private:
 	glm::vec2 cameraPos;
 	glm::vec2 playerSpawnPoint;
 
+	// Elements de menú
 	Menu* menu;
 	Cursor* cursor;
+	bool menuCanChange;
 
+	// Elements del HUD
+	Info* info;
+
+	// Atributs de control
 	int level;
 	int enemies;
 	bool activeBoss;
-	int menu_state; // 6 = Game Over, 0 = main menu
+	MenuState menu_state;
 	GameState state;
 
 };
