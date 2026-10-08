@@ -7,7 +7,7 @@ images/tilesheet1.png 	-- Tilesheet
 3                      3
 3                 666  3
 3   666    666         3
-3                      3
+3              G       3
 3     666       666    3
 3                      3
 38P       H      R    D3

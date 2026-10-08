@@ -110,6 +110,9 @@ MenuState Scene::lvl2menu(int i) {
 
 void Scene::init_level(int i) {
 
+	// Reset timer;
+	level_time = 1*60000; // 3 mins en ms
+
 	// Reset Bombas
 	for (Bomba* bomb : activeBombs) delete bomb;
 	activeBombs.clear();
@@ -251,6 +254,12 @@ void Scene::update(int deltaTime) {
 	}
 
 	else if (state == GameState::GAME) {
+
+		level_time -= deltaTime;
+		if (level_time < 0) {
+			player->die(false, deltaTime);
+			level_time = 1 * 60000;
+		}
 
 		// Spawneamos todos los powerups que se hayan descubierto.
 		std::queue<EntitySpawn> powers = map->getPowerUpSpawns();
@@ -404,7 +413,7 @@ void Scene::update(int deltaTime) {
 		player->update(deltaTime);
 
 		// Actualitzem HUD
-		info->update(deltaTime, player);
+		info->update(deltaTime, player, level_time);
 
 		// Para debug
 		if (Game::instance().getKey(GLFW_KEY_J)) {

@@ -86,6 +86,7 @@ private:
 
 	// Atributs de control
 	int level;
+	int level_time;
 	int enemies;
 	bool activeBoss;
 	MenuState menu_state;

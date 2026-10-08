@@ -19,9 +19,6 @@ void Info::configureTexture(Texture* t) {
 }
 
 void Info::init(ShaderProgram& program) {
-
-	lifes = 3;
-
 	vector<float> vertices;
 	texProgram = &program;
 
@@ -55,7 +52,8 @@ void Info::init(ShaderProgram& program) {
 	glEnableVertexAttribArray(texCoordLocation);
 }
 
-void Info::update(int deltaTime, Player* player){
+void Info::update(int deltaTime, Player* player, int level_time){
+	remainingTime = level_time;
 	lifes = player->getVidas();
 	heart = player->isHeartActive();
 	bombs = player->getMaxBombs();
@@ -88,23 +86,54 @@ void Info::render() {
 
 	glm::vec2 numTexCoords;
 
-	// Background
+	/* Background */
 	texProgram->setUniform2f("texCoordDispl", 0.5f, 0.5f);
 	glm::mat4 modelview = glm::mat4(1.0f);
-	//modelview = glm::translate(modelview, glm::vec3(0.0, 0.0, 0.0));
 	modelview = glm::scale(modelview, glm::vec3(64.0, 3.0, 1.0));
 	texProgram->setUniformMatrix4f("modelview", modelview);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
-	// Timer
+	/* Timer */
 	texProgram->setUniform2f("texCoordDispl", 0.75f, 0.5f);
 	modelview = glm::mat4(1.0f);
 	modelview = glm::translate(modelview, glm::vec3(3.0, 0.0, 0.0));
 	modelview = glm::scale(modelview, glm::vec3(3.0, 3.0, 1.0));
 	texProgram->setUniformMatrix4f("modelview", modelview);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+	
+	// Primer número
+	int min = remainingTime / 60000;
+	numTexCoords = num2coords(min);
+	texProgram->setUniform2f("texCoordDispl", numTexCoords.x, numTexCoords.y);
+	modelview = glm::mat4(1.0f);
+	modelview = glm::translate(modelview, glm::vec3(6.0, 0.0, 0.0));
+	modelview = glm::scale(modelview, glm::vec3(3.0, 3.0, 1.0));
+	texProgram->setUniformMatrix4f("modelview", modelview);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
 
-	// Vides
+	// Dos punts
+	
+	// Segon número
+	int ms = remainingTime % 60000;
+	int sec1 = ms / 10000;
+	int sec2 = ms / 1000 - sec1*10;
+	numTexCoords = num2coords(sec1);
+	texProgram->setUniform2f("texCoordDispl", numTexCoords.x, numTexCoords.y);
+	modelview = glm::mat4(1.0f);
+	modelview = glm::translate(modelview, glm::vec3(9.0, 0.0, 0.0));
+	modelview = glm::scale(modelview, glm::vec3(3.0, 3.0, 1.0));
+	texProgram->setUniformMatrix4f("modelview", modelview);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+	numTexCoords = num2coords(sec2);
+	texProgram->setUniform2f("texCoordDispl", numTexCoords.x, numTexCoords.y);
+	modelview = glm::mat4(1.0f);
+	modelview = glm::translate(modelview, glm::vec3(12.0, 0.0, 0.0));
+	modelview = glm::scale(modelview, glm::vec3(3.0, 3.0, 1.0));
+	texProgram->setUniformMatrix4f("modelview", modelview);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+
+	/* Vides */
 	texProgram->setUniform2f("texCoordDispl", 0.f, 0.75f);
 	modelview = glm::mat4(1.0f);
 	modelview = glm::translate(modelview, glm::vec3(20.0, 0.0, 0.0));
@@ -120,7 +149,7 @@ void Info::render() {
 	texProgram->setUniformMatrix4f("modelview", modelview);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
-	// Bombes
+	/* Bombes */
 	texProgram->setUniform2f("texCoordDispl", 0.25f, 0.75f);
 	modelview = glm::mat4(1.0f);
 	modelview = glm::translate(modelview, glm::vec3(35.0, 0.0, 0.0));
@@ -136,7 +165,7 @@ void Info::render() {
 	texProgram->setUniformMatrix4f("modelview", modelview);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
-	// Mida
+	/* Mida */
 	texProgram->setUniform2f("texCoordDispl", 0.5f, 0.75f);
 	modelview = glm::mat4(1.0f);
 	modelview = glm::translate(modelview, glm::vec3(50.0, 0.0, 0.0));

@@ -15,7 +15,7 @@ public:
 	~Info();
 
 	void init(ShaderProgram& program);
-	void update(int deltaTime, Player* player);
+	void update(int deltaTime, Player* player, int level_time);
 	void render();
 
 private:
@@ -30,6 +30,7 @@ private:
 	Texture font;
 
 	// Game info
+	int remainingTime;
 	int lifes;
 	bool heart;
 	int bombs;
