@@ -279,3 +279,7 @@ void Player::setPosition(const glm::vec2& pos) {
 }
 
 void Player::setGodMode() { godMode = !godMode;}
+
+int Player::getMaxBombs() { return maxBombs; }
+bool Player::isHeartActive() { return heart; }
+bool Player::isRemoteActive() { return remoteExplosion; }

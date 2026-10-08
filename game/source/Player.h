@@ -38,6 +38,9 @@ public:
 	bool isDead() const;
 	bool isDeathAnimationFinished() const;
 	int getVidas() const;
+	int getMaxBombs();
+	bool isHeartActive();
+	bool isRemoteActive();
 	void reset();
 	void gameOverReset();
 

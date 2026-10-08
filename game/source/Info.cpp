@@ -55,15 +55,27 @@ void Info::init(ShaderProgram& program) {
 	glEnableVertexAttribArray(texCoordLocation);
 }
 
-void Info::update(int deltaTime){
-	lifes = 3;
+void Info::update(int deltaTime, Player* player){
+	lifes = player->getVidas();
+	heart = player->isHeartActive();
+	bombs = player->getMaxBombs();
+	remote = player->isRemoteActive();
+	size = player->getExplosionRadius();
 }
 
+// Se puedae mejorar, caclculando a partir de i con modulos y tal.
 glm::vec2 Info::num2coords(int i) {
 	switch (i) {
+	case 0: return glm::vec2(0.0, 0.0);
 	case 1: return glm::vec2(0.25, 0.0);
 	case 2: return glm::vec2(0.5, 0.0);
 	case 3: return glm::vec2(0.75, 0.0);
+	case 4: return glm::vec2(0.0, 0.25);
+	case 5: return glm::vec2(0.25, 0.25);
+	case 6: return glm::vec2(0.5, 0.25);
+	case 7: return glm::vec2(0.75, 0.25);
+	case 8: return glm::vec2(0.0, 0.5);
+	case 9: return glm::vec2(0.25, 0.5);
 	}
 }
 
@@ -116,10 +128,26 @@ void Info::render() {
 	texProgram->setUniformMatrix4f("modelview", modelview);
 	glDrawArrays(GL_TRIANGLES, 0, 6);
 
+	numTexCoords = num2coords(bombs);
+	texProgram->setUniform2f("texCoordDispl", numTexCoords.x, numTexCoords.y);
+	modelview = glm::mat4(1.0f);
+	modelview = glm::translate(modelview, glm::vec3(40.0, 0.0, 0.0));
+	modelview = glm::scale(modelview, glm::vec3(3.0, 3.0, 1.0));
+	texProgram->setUniformMatrix4f("modelview", modelview);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
 	// Mida
 	texProgram->setUniform2f("texCoordDispl", 0.5f, 0.75f);
 	modelview = glm::mat4(1.0f);
 	modelview = glm::translate(modelview, glm::vec3(50.0, 0.0, 0.0));
+	modelview = glm::scale(modelview, glm::vec3(3.0, 3.0, 1.0));
+	texProgram->setUniformMatrix4f("modelview", modelview);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	numTexCoords = num2coords(size);
+	texProgram->setUniform2f("texCoordDispl", numTexCoords.x, numTexCoords.y);
+	modelview = glm::mat4(1.0f);
+	modelview = glm::translate(modelview, glm::vec3(55.0, 0.0, 0.0));
 	modelview = glm::scale(modelview, glm::vec3(3.0, 3.0, 1.0));
 	texProgram->setUniformMatrix4f("modelview", modelview);
 	glDrawArrays(GL_TRIANGLES, 0, 6);

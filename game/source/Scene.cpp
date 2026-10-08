@@ -252,9 +252,6 @@ void Scene::update(int deltaTime) {
 
 	else if (state == GameState::GAME) {
 
-		// Actualitzem HUD
-		info->update(deltaTime);
-
 		// Spawneamos todos los powerups que se hayan descubierto.
 		std::queue<EntitySpawn> powers = map->getPowerUpSpawns();
 		while (!powers.empty()) {
@@ -405,6 +402,9 @@ void Scene::update(int deltaTime) {
 		}
 
 		player->update(deltaTime);
+
+		// Actualitzem HUD
+		info->update(deltaTime, player);
 
 		// Para debug
 		if (Game::instance().getKey(GLFW_KEY_J)) {

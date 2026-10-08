@@ -15,7 +15,7 @@ public:
 	~Info();
 
 	void init(ShaderProgram& program);
-	void update(int deltaTime);
+	void update(int deltaTime, Player* player);
 	void render();
 
 private:
