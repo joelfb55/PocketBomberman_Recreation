@@ -5,6 +5,8 @@
 #include <glm/glm.hpp>
 #include "Texture.h"
 #include "ShaderProgram.h"
+#include "Sprite.h"
+#include "Player.h"
 
 
 class Info
@@ -18,13 +20,21 @@ public:
 
 private:
 	void configureTexture(Texture* t);
+	glm::vec2 num2coords(int i);
 
 private:
 	GLuint vao;
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
 	ShaderProgram* texProgram;
-	Texture background, timerLogo, lifesLogo, bombsLogo, sizeLogo;
+	Texture font;
+
+	// Game info
+	int lifes;
+	bool heart;
+	int bombs;
+	bool remote;
+	int size;
 };
 
 #endif
