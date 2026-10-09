@@ -1,8 +1,8 @@
 TILEMAP
 12 6							-- Size of tile map in tiles
 16 16 							-- Tile size & block size
-images/tilesheet1.png 	-- Tilesheet
-4 4 								-- Number of tiles in tilesheet
+images/tilesheetlvlboss.png 	-- Tilesheet
+8 4 								-- Number of tiles in tilesheet
 122222222224
 3          3
 3     O    3

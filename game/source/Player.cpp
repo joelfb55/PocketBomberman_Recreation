@@ -5,7 +5,7 @@
 #include "Game.h"
 
 #define PLAYER_SIZE 16
-#define HITBOX_REDUCTION 0		// Indica cuantos pixeles quitamos al size para las colisiones de amplitud (x)
+#define HITBOX_REDUCTION 4		// Indica cuantos pixeles quitamos al size para las colisiones de amplitud (x)
 #define MOVEMENT_VELOCITY 1		// [pxls]
 
 #define JUMP_ANGLE_STEP 4

@@ -7,6 +7,9 @@
 
 using namespace std;
 
+#define BREAKABLE 'j'-'a'+10
+#define DOOR 'k'-'a'+10
+#define OPENDOOR DOOR+1
 
 TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program){
 	TileMap *map = new TileMap(levelFile, minCoords, program);
@@ -50,7 +53,7 @@ bool TileMap::loadLevel(const string &levelFile){
 	string line, tilesheetFile;
 	stringstream sstream;
 	char tile;
-	
+
 	fin.open(levelFile.c_str());
 	if(!fin.is_open())
 		return false;
@@ -91,12 +94,11 @@ bool TileMap::loadLevel(const string &levelFile){
 			else if (tile >= '0' && tile <= '9') {
 				map[j * mapSize.x + i] = tile - '0';
 			}
-			else if(tile == 'a') map[j * mapSize.x + i] = 11;
-			else if (tile == 'b') map[j * mapSize.x + i] = 12;
+			else if(tile >= 'a' && tile <= 'v') map[j * mapSize.x + i] = tile - 'a' + 10;
 
 			// Puerta
 			else if (tile == 'D') {
-				map[j * mapSize.x + i] = 9;
+				map[j * mapSize.x + i] = DOOR;
 				door_offset = j * mapSize.x + i;
 				door_pixel[0] = i * tileSize;
 				door_pixel[1] = j * tileSize;
@@ -119,19 +121,19 @@ bool TileMap::loadLevel(const string &levelFile){
 
 			// PowerUps
 			else if (tile == 'B') {
-				map[j * mapSize.x + i] = 8;
+				map[j * mapSize.x + i] = BREAKABLE;
 				powerups[j * mapSize.x + i] = EntityType::BOMB_UP;
 			}
 			else if (tile == 'F') {
-				map[j * mapSize.x + i] = 8;
+				map[j * mapSize.x + i] = BREAKABLE;
 				powerups[j * mapSize.x + i] = EntityType::FIRE_UP;
 			}
 			else if (tile == 'H') {
-				map[j * mapSize.x + i] = 8;
+				map[j * mapSize.x + i] = BREAKABLE;
 				powerups[j * mapSize.x + i] = EntityType::HEART;
 			}
 			else if (tile == 'R') {
-				map[j * mapSize.x + i] = 8;
+				map[j * mapSize.x + i] = BREAKABLE;
 				powerups[j * mapSize.x + i] = EntityType::REMOTE_CONTROLLER;
 			}
 
@@ -276,7 +278,7 @@ bool TileMap::isTileSolid(int tileX, int tileY) const {
 	if (tileX < 0 || tileX >= mapSize.x || tileY < 0 || tileY >= mapSize.y)
 		return true;
 
-	if (map[tileY * mapSize.x + tileX] == 10) return false;
+	if (map[tileY * mapSize.x + tileX] == OPENDOOR) return false;
 
 	// Bloques del mapa
 	if (map[tileY * mapSize.x + tileX] != 0)
@@ -310,17 +312,17 @@ const std::queue<EntitySpawn>& TileMap::getPowerUpSpawns() const { return powerU
 bool TileMap::isWallTile(int tileX, int tileY) const {
 	if (tileX < 0 || tileX >= mapSize.x || tileY < 0 || tileY >= mapSize.y)
 		return true; // Fuera de límites cuenta como muro infranqueable
-	return map[tileY * mapSize.x + tileX] != 8 && map[tileY * mapSize.x + tileX] != 0;
+	return map[tileY * mapSize.x + tileX] != BREAKABLE && map[tileY * mapSize.x + tileX] != 0;
 }
 
 bool TileMap::isDestructibleTile(int tileX, int tileY) const {
 	if (tileX < 0 || tileX >= mapSize.x || tileY < 0 || tileY >= mapSize.y)
 		return false;
-	return map[tileY * mapSize.x + tileX] == 8; // 2 = Bloque destructible
+	return map[tileY * mapSize.x + tileX] == BREAKABLE;
 }
 
 void TileMap::open_door() {
-	map[door_offset] = 10;
+	map[door_offset] = OPENDOOR;
 	rebuildVBO();
 }
 
