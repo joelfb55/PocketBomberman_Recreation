@@ -67,9 +67,6 @@
     <ClCompile Include="Boss.cpp">
       <Filter>Archivos de código fuente\Enemigos</Filter>
     </ClCompile>
-    <ClCompile Include="Timer.cpp">
-      <Filter>Archivos de código fuente\HUD</Filter>
-    </ClCompile>
     <ClCompile Include="TileMap.cpp">
       <Filter>Archivos de código fuente\General</Filter>
     </ClCompile>
@@ -78,6 +75,9 @@
     </ClCompile>
     <ClCompile Include="Cursor.cpp">
       <Filter>Archivos de código fuente\Menus</Filter>
+    </ClCompile>
+    <ClCompile Include="Projectile.cpp">
+      <Filter>Archivos de código fuente\Enemigos</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -135,9 +135,6 @@
     <ClInclude Include="Info.h">
       <Filter>Archivos de encabezado\HUD</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Archivos de encabezado\HUD</Filter>
-    </ClInclude>
     <ClInclude Include="Heart.h">
       <Filter>Archivos de encabezado\PowerUps</Filter>
     </ClInclude>
@@ -152,6 +149,9 @@
     </ClInclude>
     <ClInclude Include="Menu.h">
       <Filter>Archivos de encabezado\Menus</Filter>
+    </ClInclude>
+    <ClInclude Include="Projectile.h">
+      <Filter>Archivos de encabezado\Enemigos</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

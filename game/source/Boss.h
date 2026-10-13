@@ -8,6 +8,7 @@
 #include <random>
 #include "Sprite.h"
 #include "TileMap.h"
+#include "SimpleProjectile.h"
 
 enum class BossState { MOVING, ATTACK1, DYING, DEAD };
 
@@ -43,6 +44,8 @@ private:
     int time_next_attack;
     int attacking_time;
     //float deathTimer = 0.f;
+
+    // Projectiles
 
 };
 

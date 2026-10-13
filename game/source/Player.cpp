@@ -5,7 +5,7 @@
 #include "Game.h"
 
 #define PLAYER_SIZE 16
-#define HITBOX_REDUCTION 4		// Indica cuantos pixeles quitamos al size para las colisiones de amplitud (x)
+#define HITBOX_REDUCTION 2		// Indica cuantos pixeles quitamos al size para las colisiones de amplitud (x)
 #define MOVEMENT_VELOCITY 1		// [pxls]
 
 #define JUMP_ANGLE_STEP 4
@@ -15,6 +15,7 @@
 #define HEART_IMMUNITY_TIME 1000.f
 
 #define DEATH_ANIMATION_TIME 1000.f
+#define DEATH_BOMB_ANIMATION_TIME 1000.f
 
 // FUNCIONES DE OBJETO
 Player::Player(){
@@ -41,7 +42,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram){
 	spritesheet.setMagFilter(GL_NEAREST);
 
 	// (pixeles personaje, tam celda[0,1], ... )
-	sprite = Sprite::createSprite(glm::ivec2(PLAYER_SIZE, PLAYER_SIZE), glm::vec2(18.f/253, 18.f/632), &spritesheet, &shaderProgram);
+	sprite = Sprite::createSprite(glm::ivec2(PLAYER_SIZE, PLAYER_SIZE), glm::vec2(0.125, 0.5), &spritesheet, &shaderProgram);
 	sprite->setNumberAnimations(6);
 		
 		// Parado
@@ -51,29 +52,28 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram){
 		// Corriendo
 		sprite->setAnimationSpeed(MOVE, 10);
 		sprite->addKeyframe(MOVE, glm::vec2(0.f, 0.f));
-		sprite->addKeyframe(MOVE, glm::vec2(18.f / 253, 0.f));
-		sprite->addKeyframe(MOVE, glm::vec2(35.f / 253, 0.f));
+		sprite->addKeyframe(MOVE, glm::vec2(0.125f, 0.f));
+		sprite->addKeyframe(MOVE, glm::vec2(0.25f, 0.f));
 
 		// Saltando
 		sprite->setAnimationSpeed(JUMP, 8);
-		sprite->addKeyframe(JUMP, glm::vec2(51.f / 253, 0.f));
-		sprite->addKeyframe(JUMP, glm::vec2(4 * 17.f / 253, 0.f));
+		sprite->addKeyframe(JUMP, glm::vec2(0.5f, 0.f));
 
 		// Cayendo
 		sprite->setAnimationSpeed(FALL, 8);
-		sprite->addKeyframe(FALL, glm::vec2(5 * 17.f / 253, 0.f));
+		sprite->addKeyframe(FALL, glm::vec2(0.625f, 0.f));
 
 		// Muerte por bomba
 		sprite->setAnimationSpeed(DEATH_BY_BOMB, 4);
-		sprite->addKeyframe(DEATH_BY_BOMB, glm::vec2((3 * 18.f - 1) / 253, 18.f / 632));
-		sprite->addKeyframe(DEATH_BY_BOMB, glm::vec2((4 * 18.f - 1) / 253, 18.f / 632));
-		sprite->addKeyframe(DEATH_BY_BOMB, glm::vec2((5 * 18.f - 1) / 253, 18.f / 632));
-		sprite->addKeyframe(DEATH_BY_BOMB, glm::vec2((6 * 18.f - 1) / 253, 18.f / 632));
+		sprite->addKeyframe(DEATH_BY_BOMB, glm::vec2(0.375f, 0.5f));
+		sprite->addKeyframe(DEATH_BY_BOMB, glm::vec2(0.5f, 0.5f));
+		sprite->addKeyframe(DEATH_BY_BOMB, glm::vec2(0.625f, 0.5f));
+		sprite->addKeyframe(DEATH_BY_BOMB, glm::vec2(0.75, 0.5));
 
 		// Muerte por enemigo
 		sprite->setAnimationSpeed(DEATH_BY_ENEMY, 8);
-		sprite->addKeyframe(DEATH_BY_ENEMY, glm::vec2((7 * 18.f - 1) / 253, 18.f / 632));
-		sprite->addKeyframe(DEATH_BY_ENEMY, glm::vec2(143.f / 253, 18.f / 632));
+		sprite->addKeyframe(DEATH_BY_ENEMY, glm::vec2(0.75f, 0.f));
+		sprite->addKeyframe(DEATH_BY_ENEMY, glm::vec2(0.875, 0.f));
 
 	// Activamos la primera animacion
 	sprite->changeAnimation(0);
@@ -112,7 +112,7 @@ void Player::update(int deltaTime){
 			sprite->changeAnimation(MOVE);
 
 		posPlayer.x -= MOVEMENT_VELOCITY;
-		if(map->collisionMoveLeft(posPlayer, glm::ivec2(PLAYER_SIZE - HITBOX_REDUCTION, PLAYER_SIZE))){
+		if(map->collisionMoveLeft(glm::ivec2(posPlayer.x + HITBOX_REDUCTION, posPlayer.y), glm::ivec2(PLAYER_SIZE - 2*HITBOX_REDUCTION, PLAYER_SIZE))){
 			posPlayer.x += MOVEMENT_VELOCITY;
 			sprite->changeAnimation(STAND);
 		}
@@ -125,7 +125,7 @@ void Player::update(int deltaTime){
 			sprite->changeAnimation(MOVE);
 
 		posPlayer.x += MOVEMENT_VELOCITY;
-		if(map->collisionMoveRight(posPlayer, glm::ivec2(PLAYER_SIZE - HITBOX_REDUCTION, PLAYER_SIZE))){
+		if(map->collisionMoveRight(glm::ivec2(posPlayer.x + HITBOX_REDUCTION, posPlayer.y), glm::ivec2(PLAYER_SIZE - 2*HITBOX_REDUCTION, PLAYER_SIZE))) {
 			posPlayer.x -= MOVEMENT_VELOCITY;
 			sprite->changeAnimation(STAND);
 		}
@@ -153,7 +153,7 @@ void Player::update(int deltaTime){
 				if (sprite->animation() != FALL)
 					sprite->changeAnimation(FALL);
 
-				bJumping = !map->collisionMoveDown(posPlayer, glm::ivec2(PLAYER_SIZE, PLAYER_SIZE), &posPlayer.y);
+				bJumping = !map->collisionMoveDown(glm::ivec2(posPlayer.x + HITBOX_REDUCTION, posPlayer.y), glm::ivec2(PLAYER_SIZE - 2*HITBOX_REDUCTION, PLAYER_SIZE), &posPlayer.y);
 				if(!bJumping) sprite->changeAnimation(STAND);
 			
 			}
@@ -163,7 +163,7 @@ void Player::update(int deltaTime){
 					sprite->changeAnimation(JUMP);
 
 				// Colision techo
-				if (map->collisionMoveUp(posPlayer, glm::ivec2(PLAYER_SIZE - HITBOX_REDUCTION, PLAYER_SIZE), &posPlayer.y)){
+				if (map->collisionMoveUp(glm::ivec2(posPlayer.x + HITBOX_REDUCTION, posPlayer.y), glm::ivec2(PLAYER_SIZE - 2*HITBOX_REDUCTION, PLAYER_SIZE), &posPlayer.y)){
 					bJumping = false;
 					sprite->changeAnimation(FALL);
 				}
@@ -173,7 +173,7 @@ void Player::update(int deltaTime){
 	else{	// Aplicar gravedad si no saltas i comporbar si quiere saltar
 		posPlayer.y += FALL_STEP;
 		// Estamos en el suelo...
-		if(map->collisionMoveDown(posPlayer, glm::ivec2(PLAYER_SIZE - HITBOX_REDUCTION, PLAYER_SIZE), &posPlayer.y)){
+		if(map->collisionMoveDown(glm::ivec2(posPlayer.x + HITBOX_REDUCTION, posPlayer.y), glm::ivec2(PLAYER_SIZE - 2*HITBOX_REDUCTION, PLAYER_SIZE), &posPlayer.y)){
 			if (sprite->animation() == FALL){
 				sprite->changeAnimation(STAND);
 			}
@@ -241,9 +241,14 @@ void Player::die(bool by_bomb, int deltaTime) {
 	}
 	bDead = true;
 	vidas--;
-	deathTimer = DEATH_ANIMATION_TIME;
-	if (by_bomb) sprite->changeAnimation(DEATH_BY_BOMB);
-	else sprite->changeAnimation(DEATH_BY_ENEMY);
+	if (by_bomb) {
+		sprite->changeAnimation(DEATH_BY_BOMB);
+		deathTimer = DEATH_BOMB_ANIMATION_TIME;
+	}
+	else {
+		sprite->changeAnimation(DEATH_BY_ENEMY);
+		deathTimer = DEATH_ANIMATION_TIME;
+	}
 }
 bool Player::isDeathAnimationFinished() const { return bDead && deathTimer <= 0.f; }
 bool Player::isDead() const { return bDead; }

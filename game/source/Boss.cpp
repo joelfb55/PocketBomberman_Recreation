@@ -39,7 +39,6 @@ void Boss::init(const glm::vec2& pos, const glm::ivec2& tileMapDispl, ShaderProg
     // Attack
     sprite->setAnimationSpeed(1, 8);
     sprite->addKeyframe(1, glm::vec2(0.5f, 0.f));
-    
 
     sprite->changeAnimation(0);
     sprite->setFlipped(1);

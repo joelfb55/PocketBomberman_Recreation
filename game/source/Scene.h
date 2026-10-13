@@ -84,6 +84,10 @@ private:
 	// Elements del HUD
 	Info* info;
 
+	// Atributs afegits per implementació ràpida del control remot
+	bool explode_first_bomb;
+	bool remote_cooldown;
+
 	// Atributs de control
 	int level;
 	int level_time;

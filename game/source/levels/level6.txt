@@ -1,0 +1,21 @@
+TILEMAP
+16 16 							-- Size of tile map in tiles
+16 16 							-- Tile size & block size
+images/tilesheetlvl1.png 	-- Tilesheet
+8 4								-- Number of tiles in tilesheet
+1222222222222223
+4  j     j   j 4
+4              4
+4              4
+4              4
+4 bcd bdj8a  7 4
+4       bpi  f 4
+4        Df  fj4
+46   bccccq bpd4
+4              4
+4bd            4
+4   6      bd  4
+4              4
+4j  P    j     4
+4555555555555554
+4222222222222224

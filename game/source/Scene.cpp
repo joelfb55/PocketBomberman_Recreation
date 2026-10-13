@@ -65,6 +65,8 @@ void Scene::init(){
 	state = GameState::MENU;
 	menu_state = MenuState::MAIN;
 	menuCanChange = true;
+	explode_first_bomb = false;
+	remote_cooldown = false;
 	level = 1;
 }
 
@@ -111,7 +113,7 @@ MenuState Scene::lvl2menu(int i) {
 void Scene::init_level(int i) {
 
 	// Reset timer;
-	level_time = 1*60000; // 3 mins en ms
+	level_time = 9*60000; // 3 mins en ms
 
 	// Reset Bombas
 	for (Bomba* bomb : activeBombs) delete bomb;
@@ -315,24 +317,47 @@ void Scene::update(int deltaTime) {
 		}
 
 		// Actualizar bombas activas
+		if (!remote_cooldown && Game::instance().getKey(GLFW_KEY_C)) {
+			explode_first_bomb = true;
+			remote_cooldown = true;
+		}
 		for (auto it = activeBombs.begin(); it != activeBombs.end();) {
 			(*it)->updatePlayerOverlap(player->getPosition(), glm::ivec2(16, 16), map->getTileSize());
 
 			(*it)->update(deltaTime);
+			if (player->isRemoteActive()) {
+				if (explode_first_bomb) {
+					player->onBombExploded();
+					Explosion* expl = new Explosion();
+					expl->init((*it)->getTilePos(), player->getExplosionRadius(), texProgram, map);
+					activeExplosions.push_back(expl);
 
-			if ((*it)->isExploded()) {
-				player->onBombExploded();
-
-				Explosion* expl = new Explosion();
-				expl->init((*it)->getTilePos(), player->getExplosionRadius(), texProgram, map);
-				activeExplosions.push_back(expl);
-
-				delete* it;
-				it = activeBombs.erase(it);
+					delete* it;
+					it = activeBombs.erase(it);
+					explode_first_bomb = false;
+				}
+				else {
+					++it;
+				}
 			}
 			else {
-				++it;
+				if ((*it)->isExploded()) {
+					player->onBombExploded();
+
+					Explosion* expl = new Explosion();
+					expl->init((*it)->getTilePos(), player->getExplosionRadius(), texProgram, map);
+					activeExplosions.push_back(expl);
+
+					delete* it;
+					it = activeBombs.erase(it);
+				}
+				else {
+					++it;
+				}
 			}
+		}
+		if (!Game::instance().getKey(GLFW_KEY_C)) {
+			remote_cooldown = false;
 		}
 
 		// Actualizar explosiones

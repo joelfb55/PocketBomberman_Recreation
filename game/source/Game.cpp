@@ -44,6 +44,16 @@ void Game::keyPressed(int key)
 		scene.init_level(4);
 	if (key == GLFW_KEY_5)
 		scene.init_level(5);
+	if (key == GLFW_KEY_Q)
+		scene.init_level(6);
+	if (key == GLFW_KEY_W)
+		scene.init_level(7);
+	if (key == GLFW_KEY_E)
+		scene.init_level(8);
+	if (key == GLFW_KEY_R)
+		scene.init_level(9);
+	if (key == GLFW_KEY_T)
+		scene.init_level(10);
 	//std::cerr << "pressed " << key << std::endl;
 	keys[key] = true;
 }

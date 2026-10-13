@@ -16,6 +16,6 @@ images/tilesheetlvl4.png 	-- Tilesheet
 3556           3
 3  75      55  3
 3              3
-38  P    8     3
+38  P    RBBBB 3
 3555555555555553
 3222222222222222

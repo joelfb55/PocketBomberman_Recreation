@@ -38,17 +38,19 @@ void Bomba::init(const glm::ivec2& tilePos, ShaderProgram& shaderProgram){
 
 // FUNCIONES DE JUEGO
 void Bomba::update(int deltaTime){
-	if (bExploded) return;
+	//if (bExploded) return;
 
 	sprite->update(deltaTime);
 
-	timer -= float(deltaTime);
-	if (timer <= 0.f){
-		bExploded = true;
+	if (!bExploded) {
+		timer -= float(deltaTime);
+		if (timer <= 0.f) {
+			bExploded = true;
+		}
 	}
 }
 void Bomba::render() const{
-	if (!bExploded && sprite != nullptr){
+	if (sprite != nullptr){
 		sprite->render();
 	}
 }
