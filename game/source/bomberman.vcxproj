@@ -25,6 +25,7 @@
     <ClInclude Include="Heart.h" />
     <ClInclude Include="Info.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="Minion.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="PowerUp.h" />
     <ClInclude Include="RemoteController.h" />
@@ -51,6 +52,7 @@
     <ClCompile Include="Info.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Minion.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="PowerUp.cpp" />
     <ClCompile Include="RemoteController.cpp" />

@@ -10,6 +10,9 @@ using namespace std;
 #define BREAKABLE 'j'-'a'+10
 #define DOOR 'k'-'a'+10
 #define OPENDOOR DOOR+1
+#define VERTICAL_BORDER 4
+#define HORITZONTAL_BORDER 2
+#define FLOOR 5
 
 TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program){
 	TileMap *map = new TileMap(levelFile, minCoords, program);
@@ -244,14 +247,14 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 	return false;
 }
 
-bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const{
+bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const {
 	int x0, x1, y;
 
 	x0 = pos.x / tileSize;
 	x1 = (pos.x + size.x - 1) / tileSize;
 	y = pos.y / tileSize;
-	for (int x = x0; x <= x1; x++){
-		if (isTileSolid(x, y)){
+	for (int x = x0; x <= x1; x++) {
+		if (isTileSolid(x, y)) {
 			*posY = (y + 1) * tileSize;
 			return true;
 		}
@@ -260,6 +263,66 @@ bool TileMap::collisionMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int
 	return false;
 }
 
+
+bool TileMap::collisionBorderMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const{
+	int x0, x1, y;
+
+	x0 = pos.x / tileSize;
+	x1 = (pos.x + size.x - 1) / tileSize;
+	y = pos.y / tileSize;
+	for (int x = x0; x <= x1; x++){
+		if (isTileBorder(x, y)){
+			*posY = (y + 1) * tileSize;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool TileMap::collisionBorderMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) const {
+	int x, y0, y1;
+
+	x = pos.x / tileSize;
+	y0 = pos.y / tileSize;
+	y1 = (pos.y + size.y - 1) / tileSize;
+	for (int y = y0; y <= y1; y++) {
+		if (isTileBorder(x, y))
+			return true;
+	}
+
+	return false;
+}
+bool TileMap::collisionBorderMoveRight(const glm::ivec2& pos, const glm::ivec2& size) const {
+	int x, y0, y1;
+
+	x = (pos.x + size.x - 1) / tileSize;
+	y0 = pos.y / tileSize;
+	y1 = (pos.y + size.y - 1) / tileSize;
+	for (int y = y0; y <= y1; y++) {
+		if (isTileBorder(x, y))
+			return true;
+	}
+
+	return false;
+}
+bool TileMap::collisionBorderMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const {
+	int x0, x1, y;
+
+	x0 = pos.x / tileSize;
+	x1 = (pos.x + size.x - 1) / tileSize;
+	y = (pos.y + size.y - 1) / tileSize;
+	for (int x = x0; x <= x1; x++) {
+		if (isTileBorder(x, y)) {
+			if (*posY - tileSize * y + size.y <= 4) {
+				*posY = tileSize * y - size.y;
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
 
 bool TileMap::doorCollision(glm::vec2& playerCoords) {
 	return playerCoords.x == door_pixel.x && playerCoords.y == door_pixel.y;
@@ -299,6 +362,11 @@ bool TileMap::isTileSolid(int tileX, int tileY) const {
 		}
 	}
 
+	return false;
+}
+
+bool TileMap::isTileBorder(int tileX, int tileY) const {
+	if (map[tileY * mapSize.x + tileX] == HORITZONTAL_BORDER || map[tileY * mapSize.x + tileX] == VERTICAL_BORDER || map[tileY * mapSize.x + tileX] == FLOOR) return true;
 	return false;
 }
 

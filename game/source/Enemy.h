@@ -17,7 +17,7 @@ public:
 
     // FUNCIONES DE JUEGO
     void update(int deltaTime, TileMap* map, glm::vec2 player_pos);
-    void render();
+    virtual void render();
 
     // FUNCIONES AUXILIARES
     bool checkCollision(const glm::vec2& playerPos, const glm::ivec2& playerSize) const;

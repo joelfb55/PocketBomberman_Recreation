@@ -12,8 +12,8 @@
 #define SCREEN_X 16
 #define SCREEN_Y 16
 
-#define VIRTUAL_WIDTH 160.0f
-#define VIRTUAL_HEIGHT 112.0f
+#define VIRTUAL_WIDTH 240.0f //160.0f
+#define VIRTUAL_HEIGHT 168.0f // 112.0f
 
 
 // FUNCIONES DE OBJETO

@@ -8,9 +8,10 @@
 #include <random>
 #include "Sprite.h"
 #include "TileMap.h"
-#include "SimpleProjectile.h"
+#include "Projectile.h"
+#include "Minion.h"
 
-enum class BossState { MOVING, ATTACK1, DYING, DEAD };
+enum class BossState { MOVING, ATTACK1, ATTACK2, ATTACK3, DYING, DEAD };
 
 class Boss {
 public:
@@ -42,10 +43,17 @@ private:
     BossState state;
     glm::vec2 direction;
     int time_next_attack;
+    int next_attack;
     int attacking_time;
+    bool simple_attack_finished, heavy_attack_finished, minion_attack_finished;
     //float deathTimer = 0.f;
 
     // Projectiles
+    Projectile *simpleNW, *simpleWS, *simpleSE, *simpleEN;
+    Projectile* heavy;
+
+    // Minions
+    Minion* leftMinion, * rightMinion;
 
 };
 

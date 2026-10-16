@@ -40,6 +40,11 @@ public:
 	bool collisionMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
 	bool collisionMoveUp(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const;
 
+	bool collisionBorderMoveLeft(const glm::ivec2& pos, const glm::ivec2& size) const;
+	bool collisionBorderMoveRight(const glm::ivec2& pos, const glm::ivec2& size) const;
+	bool collisionBorderMoveDown(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
+	bool collisionBorderMoveUp(const glm::ivec2& pos, const glm::ivec2& size, int* posY) const;
+
 	//---
 	glm::vec2 getMapDimensions() const;
 	void setActiveBombs(const std::vector<Bomba*>* bombs);
@@ -61,6 +66,7 @@ private:
 
 	//---
 	bool isTileSolid(int tileX, int tileY) const;
+	bool isTileBorder(int tileX, int tileY) const;
 
 	
 	//---
