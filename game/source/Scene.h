@@ -20,7 +20,7 @@
 #include "Info.h"
 
 
-enum class GameState { MENU, MENU_IN, MENU_OUT, GAME };
+enum class GameState { MENU, MENU_IN, MENU_OUT_GAME, MENU_OUT, GAME };
 enum class MenuState { MAIN, LVL1, LVL2, LVL3, LVL4, LVLBOSS, GAMEOVER };
 
 class Scene

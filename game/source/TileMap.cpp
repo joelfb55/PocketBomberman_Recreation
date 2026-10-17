@@ -83,6 +83,7 @@ bool TileMap::loadLevel(const string &levelFile){
 	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
 	
 	map = new int[mapSize.x * mapSize.y];
+	door_presence = false;
 	powerups = new EntityType[mapSize.x * mapSize.y, EntityType::NOTHING];
 	for(int j=0; j<mapSize.y; j++)
 	{
@@ -101,6 +102,7 @@ bool TileMap::loadLevel(const string &levelFile){
 
 			// Puerta
 			else if (tile == 'D') {
+				door_presence = true;
 				map[j * mapSize.x + i] = DOOR;
 				door_offset = j * mapSize.x + i;
 				door_pixel[0] = i * tileSize;
@@ -325,7 +327,7 @@ bool TileMap::collisionBorderMoveDown(const glm::ivec2& pos, const glm::ivec2& s
 }
 
 bool TileMap::doorCollision(glm::vec2& playerCoords) {
-	return playerCoords.x == door_pixel.x && playerCoords.y == door_pixel.y;
+	return door_presence && playerCoords.x == door_pixel.x && playerCoords.y == door_pixel.y;
 }
 
 //---
@@ -390,8 +392,10 @@ bool TileMap::isDestructibleTile(int tileX, int tileY) const {
 }
 
 void TileMap::open_door() {
-	map[door_offset] = OPENDOOR;
-	rebuildVBO();
+	if (door_presence) {
+		map[door_offset] = OPENDOOR;
+		rebuildVBO();
+	}
 }
 
 bool TileMap::destroyTile(int tileX, int tileY) {

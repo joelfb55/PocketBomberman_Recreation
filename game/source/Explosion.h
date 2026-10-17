@@ -24,6 +24,7 @@ public:
     // FUNCIONES AUXILIARES
     bool isFinished() const;
     bool hitsTile(const glm::ivec2& tilePos) const;
+    std::vector<glm::ivec2> getAffectedTiles();
 
 private:
     void calculateExpansion(const glm::ivec2& center, int radius, ShaderProgram& shaderProgram, TileMap* map);

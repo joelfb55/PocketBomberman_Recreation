@@ -10,6 +10,7 @@
 #include "TileMap.h"
 #include "Projectile.h"
 #include "Minion.h"
+#include "Explosion.h"
 
 enum class BossState { MOVING, ATTACK1, ATTACK2, ATTACK3, DYING, DEAD };
 
@@ -24,9 +25,13 @@ public:
     void render();
 
     // FUNCIONES AUXILIARES
+    bool touchesExplosion(std::vector<glm::ivec2> affectedTiles, int tileSize);
+    void getsDamage();
     bool checkCollision(const glm::vec2& playerPos, const glm::ivec2& playerSize) const;
-    glm::vec2 getPosition() const;
-    //std::vector<glm::ivec2> getOccupiedTilePositions(int tileSize) const;
+
+    // getters
+    Minion* getLeftMinion();
+    Minion* getRightMinion();
 
     void  kill();
     bool isAlive() const;
@@ -39,6 +44,7 @@ private:
     glm::ivec2 tileDispl;
 
     // Atributos
+    int vida;
     glm::vec2 position;
     BossState state;
     glm::vec2 direction;
@@ -46,7 +52,13 @@ private:
     int next_attack;
     int attacking_time;
     bool simple_attack_finished, heavy_attack_finished, minion_attack_finished;
-    //float deathTimer = 0.f;
+    int deathTimer = 0;
+
+    // Immunity
+    bool immunity = false;
+    int immunity_time = 0;
+    bool visible = true;
+    int visible_time = 0, invisible_time = 0;
 
     // Projectiles
     Projectile *simpleNW, *simpleWS, *simpleSE, *simpleEN;
@@ -54,6 +66,7 @@ private:
 
     // Minions
     Minion* leftMinion, * rightMinion;
+    int minion_living_time = 0;
 
 };
 

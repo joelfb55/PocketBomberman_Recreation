@@ -15,8 +15,8 @@
 #define VIRTUAL_WIDTH 240.0f //160.0f
 #define VIRTUAL_HEIGHT 168.0f // 112.0f
 
-#define MENU_IN_TIME 2000.f
-#define MENU_OUT_TIME 2000.f
+#define MENU_IN_TIME 1.f
+#define MENU_OUT_TIME 1.f
 
 
 // FUNCIONES DE OBJETO
@@ -71,6 +71,7 @@ void Scene::init(){
 	explode_first_bomb = false;
 	remote_cooldown = false;
 	level = 1;
+	activeBoss = false;
 }
 
 void Scene::initShaders() {
@@ -203,6 +204,8 @@ void Scene::init_level(int i) {
 
 	player->reset();
 	updateCamera();
+
+	// Para la transición
 }
 
 void Scene::main_menu() {
@@ -261,7 +264,8 @@ void Scene::update(int deltaTime) {
 		}
 		if (!menuCanChange && !Game::instance().getKey(GLFW_KEY_ENTER)) menuCanChange = true;
 	}
-	if (state == GameState::MENU_IN) {
+
+	else if (state == GameState::MENU_IN) {
 		if (menu_in_time < 0) {
 			state = GameState::MENU;
 			menu_out_time = MENU_OUT_TIME;
@@ -277,6 +281,22 @@ void Scene::update(int deltaTime) {
 			else state = GameState::GAME;
 		}
      	menu_in_time -= deltaTime;
+	}
+
+	else if (state == GameState::MENU_OUT_GAME) {
+		if (menu_in_time < 0) {
+			if (player->getVidas() <= 0) {
+				state = GameState::MENU;
+				menu_state = MenuState::GAMEOVER;
+				menu->setImage(6);
+				player->gameOverReset();
+			}
+			else {
+				init_level(level);
+			}
+			menu_out_time = MENU_OUT_TIME;
+		}
+		menu_in_time -= deltaTime;
 	}
 
 	else if (state == GameState::GAME) {
@@ -384,6 +404,22 @@ void Scene::update(int deltaTime) {
 			remote_cooldown = false;
 		}
 
+		// Boss
+		if (activeBoss) {
+			boss->update(deltaTime, map, player->getPosition());
+			Minion* e = boss->getLeftMinion();
+			if (e->getState() == MinionState::ACTIVE && e->checkCollision(player->getPosition(), glm::ivec2(16, 16))) {
+				player->die(false, deltaTime);
+			}
+			e = boss->getRightMinion();
+			if (e->getState() == MinionState::ACTIVE && e->checkCollision(player->getPosition(), glm::ivec2(16, 16))) {
+				player->die(false, deltaTime);
+			}
+			if (boss->checkCollision(player->getPosition(), glm::ivec2(16, 16))) { // Tambien checkea los proyectiles.
+				player->die(false, deltaTime);
+			}
+		}
+
 		// Actualizar explosiones
 		for (auto it = activeExplosions.begin(); it != activeExplosions.end();) {
 			(*it)->update(deltaTime);
@@ -403,10 +439,35 @@ void Scene::update(int deltaTime) {
 					if ((*it)->hitsTile(tilePixelPos)) {
 						e->kill();
 						--enemies;
-						cout << enemies << endl;
 						break;
 					}
 				}
+			}
+
+			// Detección daño al Boss y esbirros
+			if (activeBoss) {
+				if (boss->touchesExplosion((*it)->getAffectedTiles(), map->getTileSize())) boss->getsDamage();
+				if (boss->getLeftMinion()->getState() == MinionState::ACTIVE) {
+					Enemy* e = boss->getLeftMinion();
+					const auto occupiedTiles = e->getOccupiedTilePositions(map->getTileSize()); // para los imprecisos
+					for (const glm::ivec2& tilePixelPos : occupiedTiles) {
+						if ((*it)->hitsTile(tilePixelPos)) {
+							e->kill();
+							break;
+						}
+					}
+				}
+				if (boss->getRightMinion()->getState() == MinionState::ACTIVE) {
+					Enemy* e = boss->getRightMinion();
+					const auto occupiedTiles = e->getOccupiedTilePositions(map->getTileSize()); // para los imprecisos
+					for (const glm::ivec2& tilePixelPos : occupiedTiles) {
+						if ((*it)->hitsTile(tilePixelPos)) {
+							e->kill();
+							break;
+						}
+					}
+				}
+
 			}
 
 			if ((*it)->isFinished()) {
@@ -414,11 +475,6 @@ void Scene::update(int deltaTime) {
 				it = activeExplosions.erase(it);
 			}
 			else ++it;
-		}
-
-		// Boss
-		if (activeBoss) {
-			boss->update(deltaTime, map, player->getPosition());
 		}
 
 		// Poderes
@@ -437,25 +493,18 @@ void Scene::update(int deltaTime) {
 		}
 
 		// Muerte -> faltara cambiarlo para enseñar el game over bien i demas
-		if (player->isDeathAnimationFinished()) {
-			if (player->getVidas() <= 0) {
-				//std::cout << "Game Over" << std::endl;
-				state = GameState::MENU;
-				menu_state = MenuState::GAMEOVER;
-				menu->setImage(6);
-				player->gameOverReset();
-			}
-			else {
-				init_level(level);
-			}
+		if (player->isDeathAnimationFinished()) { // Se traspassa la logica a el estado MENU_OUT_GAME
+			state = GameState::MENU_OUT_GAME;
+			menu_in_time = MENU_IN_TIME;
 		}
 
 		// Puerta
 		if (enemies == 0) {
 			map->open_door();
-			if (map->doorCollision(player->getPosition())) {
+			if (map->doorCollision(player->getPosition())) { // Igual que arriba.
 				++level;
-				init_level(level);
+				state = GameState::MENU_OUT_GAME;
+				menu_in_time = MENU_IN_TIME;
 			}
 		}
 
@@ -496,7 +545,7 @@ void Scene::render(){
 		texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 		menu->render();
 	}
-	else if (state == GameState::GAME) {
+	else if (state == GameState::GAME || state == GameState::MENU_OUT_GAME) {
 		// Camara respecto size virtual
 		projection = glm::ortho(cameraPos.x, cameraPos.x + VIRTUAL_WIDTH,
 			cameraPos.y + VIRTUAL_HEIGHT, cameraPos.y);
@@ -506,6 +555,7 @@ void Scene::render(){
 		texProgram.setUniformMatrix4f("projection", projection);
 		float val = 1.0f;
 		if (menu_out_time > 0) val = 1 - menu_out_time / MENU_OUT_TIME;
+		if (state == GameState::MENU_OUT_GAME) val = menu_in_time / MENU_IN_TIME;
 		texProgram.setUniform4f("color", val, val, val, 1.0f);
 		modelview = glm::mat4(1.0f);
 		texProgram.setUniformMatrix4f("modelview", modelview);
@@ -529,7 +579,7 @@ void Scene::render(){
 			boss->render();
 		}
 
-		player->render();
+		if(state == GameState::GAME) player->render();
 
 		// HUD
 		info->render();

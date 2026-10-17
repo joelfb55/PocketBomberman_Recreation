@@ -62,7 +62,7 @@ private:
 	bool bJumping = false;
 	bool bDead = false;
 	bool godMode = false;
-	bool remoteExplosion;
+	bool remoteExplosion = false;
 
 	// Atributos
 	int jumpAngle, startY;
@@ -72,8 +72,8 @@ private:
 	int maxBombs = 1;
 	int explosionRadius = 1;
 
-	bool heart;
-	bool immunity;
+	bool heart = false;
+	bool immunity = false;
 	float heart_immunity;
 
 	int vidas = 3;

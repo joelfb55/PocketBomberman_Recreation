@@ -95,6 +95,7 @@ private:
 	//---
 	glm::vec2 minTileCoords;
 
+	bool door_presence;
 	int door_offset;
 	glm::ivec2 door_pixel;
 

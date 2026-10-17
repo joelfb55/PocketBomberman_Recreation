@@ -29,9 +29,6 @@ Player::~Player(){
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram){
 	bJumping = false;
 	bDead = false;
-	heart = false;
-	heart_immunity = 0.f;
-	remoteExplosion = false;
 	canJump = true;
 
 	// Cargar textura
@@ -211,8 +208,8 @@ bool Player::wantsToGenerateABomb() const { return Game::instance().getKey(GLFW_
 bool Player::canDropBomb() const { return activeBombs < maxBombs; }
 glm::ivec2 Player::getBombTilePosition(int tileSize) const {
 	// Centro del sprite del jugador
-	int centerX = posPlayer.x + tileSize / 4; // 16 / 2
-	int centerY = posPlayer.y + tileSize / 4;
+	int centerX = posPlayer.x + tileSize / 2; 
+	int centerY = posPlayer.y + tileSize / 2;
 
 	//  Celda mas cercana
 	int tileX = (centerX / tileSize) * tileSize;

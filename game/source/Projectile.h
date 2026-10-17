@@ -19,6 +19,9 @@ public:
     void update(int deltaTime, TileMap* map, glm::vec2 player_pos);
     void render();
 
+    bool checkCollision(const glm::vec2& playerPos, const glm::ivec2& playerSize) const;
+
+
     //
     void activate(glm::vec2 pos, glm::vec2 direction);
     ProjectileState getState();

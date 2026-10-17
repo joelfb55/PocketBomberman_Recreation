@@ -1,12 +1,23 @@
 #include "Boss.h"
 
+#include <iostream>
+
 #define BOSS_SIZE 32.f
+#define BOSS_HITBOX_REDUCTION 8.f
 
 #define BOSS_VELOCITY 2.f
 #define ATTACK1_TIME 1000.f
 #define MIN 3000
 #define MAX 5000
 #define NUMBER_ATTACKS 3
+
+#define MINION_LIVING_TIME 10000
+
+#define IMMUNITY_TIME 1500
+#define VISIBLE_TIME 5
+#define INVISIBLE_TIME 5
+
+#define DYING_TIME 2000
 
 
 // Funciones de objecto
@@ -17,15 +28,19 @@ Boss::~Boss() {
 // Inicialicación del boss
 void Boss::init(const glm::vec2& pos, const glm::ivec2& tileMapDispl, ShaderProgram& shaderProgram) {
     position = pos;
-    heavy_attack_finished = true;
-    simple_attack_finished = true;
+    vida = 1;
     std::srand(std::time(nullptr));
 
     tileDispl = tileMapDispl;
     state = BossState::MOVING;
     direction = glm::vec2(2, 2);
+
+    // Attack variables
     time_next_attack = rand() % (MAX - MIN) + MIN;
     next_attack = 0;
+    heavy_attack_finished = true;
+    simple_attack_finished = true;
+    attacking_time = 0;
 
     spritesheet.loadFromFile("images/Boss.png", TEXTURE_PIXEL_FORMAT_RGBA);
     spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
@@ -33,7 +48,7 @@ void Boss::init(const glm::vec2& pos, const glm::ivec2& tileMapDispl, ShaderProg
     spritesheet.setMinFilter(GL_NEAREST);
     spritesheet.setMagFilter(GL_NEAREST);
     sprite = Sprite::createSprite(glm::ivec2(BOSS_SIZE, BOSS_SIZE), glm::vec2(0.25f, 1.f), &spritesheet, &shaderProgram);
-    sprite->setNumberAnimations(2);
+    sprite->setNumberAnimations(3);
 
     // Caminar
     sprite->setAnimationSpeed(0, 6);
@@ -43,6 +58,10 @@ void Boss::init(const glm::vec2& pos, const glm::ivec2& tileMapDispl, ShaderProg
     // Attack
     sprite->setAnimationSpeed(1, 8);
     sprite->addKeyframe(1, glm::vec2(0.5f, 0.f));
+
+    // Die
+    sprite->setAnimationSpeed(2, 8);
+    sprite->addKeyframe(2, glm::vec2(0.75f, 0.f));
 
     sprite->changeAnimation(0);
     sprite->setFlipped(1);
@@ -67,6 +86,11 @@ void Boss::init(const glm::vec2& pos, const glm::ivec2& tileMapDispl, ShaderProg
 }
 
 void Boss::update(int deltaTime, TileMap* map, glm::vec2 player_pos) {
+    if (state == BossState::DYING) {
+        if (deathTimer > 0) deathTimer -= deltaTime;
+        else state = BossState::DEAD;
+        return;
+    }
     if (state == BossState::MOVING || state == BossState::ATTACK2) {
         glm::vec2 oldPos = position;
         position += BOSS_VELOCITY * direction / 4.f;
@@ -112,13 +136,14 @@ void Boss::update(int deltaTime, TileMap* map, glm::vec2 player_pos) {
             else if (minion_attack_finished) {
                 state = BossState::ATTACK3;
                 minion_attack_finished = false;
+                minion_living_time = MINION_LIVING_TIME;
                 rightMinion->activate(position + glm::vec2(8.f, 8.f), true);
                 leftMinion->activate(position + glm::vec2(8.f, 8.f), false);
                 time_next_attack = rand() % (MAX - MIN) + MIN;
                 next_attack = rand() % NUMBER_ATTACKS;
                 attacking_time = 0;
             }
-            else next_attack = (next_attack + 1) % 3;
+            else next_attack = rand() % NUMBER_ATTACKS;
         }
         sprite->setPosition(glm::vec2(tileDispl.x + position.x, tileDispl.y + position.y));
         
@@ -141,6 +166,9 @@ void Boss::update(int deltaTime, TileMap* map, glm::vec2 player_pos) {
     if (leftMinion->getState() == MinionState::INACTIVE && rightMinion->getState() == MinionState::INACTIVE) {
         minion_attack_finished = true;
     }
+    if (!leftMinion->isAlive()) leftMinion->deactivate();
+    if (!rightMinion->isAlive()) rightMinion->deactivate();
+    // Podria fer que es pintés només si està actiu.
     leftMinion->update(deltaTime, map, player_pos);
     rightMinion->update(deltaTime, map, player_pos);
     heavy->update(deltaTime, map, player_pos);
@@ -150,12 +178,38 @@ void Boss::update(int deltaTime, TileMap* map, glm::vec2 player_pos) {
     simpleEN->update(deltaTime, map, player_pos);
     time_next_attack -= deltaTime;
     sprite->update(deltaTime);
+    if (immunity_time > 0) {
+        immunity_time -= deltaTime;
+    }
+    else {
+        immunity = false;
+    }
+    if (immunity){
+        if (visible) {
+            if (visible_time < 0) {
+                visible = false;
+                invisible_time = INVISIBLE_TIME;
+            }
+            else visible_time -= deltaTime;
+        }
+        else {
+            if (invisible_time < 0) {
+                visible = true;
+                visible_time = VISIBLE_TIME;
+            }
+            else invisible_time -= deltaTime;
+        }
+    }
+    if (minion_living_time > 0) {
+        minion_living_time -= deltaTime;
+    }
+    else {
+        if (leftMinion->getState() == MinionState::ACTIVE) leftMinion->kill();
+        if (rightMinion->getState() == MinionState::ACTIVE) rightMinion->kill();
+    }
 }
 
 void Boss::render() {
-    if (sprite && state != BossState::DEAD) {
-        sprite->render();
-    }
     heavy->render();
     leftMinion->render();
     rightMinion->render();
@@ -163,4 +217,57 @@ void Boss::render() {
     simpleWS->render();
     simpleSE->render();
     simpleEN->render();
+    if (sprite && state != BossState::DEAD) {
+        if (!immunity || visible) sprite->render();
+    }
+}
+
+// FUNCIONES AUXILIARES
+bool Boss::touchesExplosion(std::vector<glm::ivec2> affectedTiles, int tileSize) {
+    for (auto it = affectedTiles.begin(); it != affectedTiles.end(); ++it) {
+        int minx = (*it).x;
+        int miny = (*it).y;
+        int maxx = minx + tileSize;
+        int maxy = miny + tileSize;
+
+        int bossMinx = position.x;
+        int bossMiny = position.y;
+        int bossMaxx = bossMinx + BOSS_SIZE;
+        int bossMaxy = bossMiny + BOSS_SIZE;
+
+        if (bossMaxy > miny && maxy > bossMiny && bossMaxx > minx && maxx > bossMinx) return true;
+    }
+    return false;
+}
+
+
+void Boss::getsDamage() {
+    if (!immunity) {
+        vida -= 1;
+        immunity = true;
+        immunity_time = IMMUNITY_TIME;
+        visible_time = VISIBLE_TIME;
+        std::cerr << vida << std::endl;
+        if (vida == 0) {
+            state = BossState::DYING;
+            deathTimer = DYING_TIME;
+            if (leftMinion->getState() == MinionState::ACTIVE) leftMinion->kill();
+            if (rightMinion->getState() == MinionState::ACTIVE) rightMinion->kill();
+            sprite->changeAnimation(2);
+        }
+    }
+}
+
+Minion* Boss::getLeftMinion() { return leftMinion; }
+
+Minion* Boss::getRightMinion() { return rightMinion; }
+
+bool Boss::checkCollision(const glm::vec2& playerPos, const glm::ivec2& playerSize) const {
+    if (simpleNW->getState() == ProjectileState::ACTIVE && simpleNW->checkCollision(playerPos, playerSize)) return true;
+    if (simpleWS->getState() == ProjectileState::ACTIVE && simpleWS->checkCollision(playerPos, playerSize)) return true;
+    if (simpleSE->getState() == ProjectileState::ACTIVE && simpleSE->checkCollision(playerPos, playerSize)) return true;
+    if (simpleEN->getState() == ProjectileState::ACTIVE && simpleEN->checkCollision(playerPos, playerSize)) return true;
+    if (heavy->getState() == ProjectileState::ACTIVE && heavy->checkCollision(playerPos, playerSize)) return true;
+    return (std::abs((position.x + BOSS_SIZE / 2.f) - (playerPos.x + playerSize.x / 2.f)) < (BOSS_SIZE - BOSS_HITBOX_REDUCTION) &&
+        std::abs((position.y + BOSS_SIZE / 2.f) - (playerPos.y + playerSize.y / 2.f)) < (BOSS_SIZE - BOSS_HITBOX_REDUCTION));
 }

@@ -150,3 +150,7 @@ void Explosion::calculateExpansion(const glm::ivec2& center, int radius, ShaderP
         }
     }
 }
+
+std::vector<glm::ivec2> Explosion::getAffectedTiles() {
+    return affectedTiles;
+}

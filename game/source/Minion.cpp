@@ -104,8 +104,13 @@ void Minion::render() {
 void Minion::activate(glm::vec2 pos, bool direction) {
     position = pos;
     movingRight = direction;
+    sprite->changeAnimation(0);
     state = EnemyState::ALIVE;
     inBossState = MinionState::ACTIVE;
+}
+
+void Minion::deactivate() {
+    inBossState = MinionState::INACTIVE;
 }
 
 MinionState Minion::getState() { return inBossState; }

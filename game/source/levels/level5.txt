@@ -14,6 +14,6 @@ images/tilesheetlvlboss.png 	-- Tilesheet
 4    O           4
 4    bcd   bcd   4
 4                4
-4P              D4
+4P               4
 455555555555555554
 422222222222222224

@@ -12,6 +12,7 @@ public:
     void init(const glm::vec2& pos, const glm::ivec2& tileMapDispl, ShaderProgram& shaderProgram) override;
     void render() override;
     void activate(glm::vec2 pos, bool direction);
+    void deactivate();
     MinionState getState();
 
 protected:

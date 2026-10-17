@@ -20,6 +20,9 @@ Cursor::~Cursor() {
 
 void Cursor::init() {
 
+	canChangeDown = true;
+	canChangeUp = true;
+
 	Shader vShader, fShader;
 
 	vShader.initFromFile(VERTEX_SHADER, "shaders/simple.vert");

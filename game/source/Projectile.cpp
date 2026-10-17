@@ -65,3 +65,21 @@ void Projectile::render() {
         sprite->render();
     }
 }
+
+bool Projectile::checkCollision(const glm::vec2 & playerPos, const glm::ivec2 & playerSize) const {
+    // Suposo player size de 12x16 
+    int sizeX = 12, sizeY = 16;
+
+    int minx = position.x + (16 - projectileSize)/2.f;
+    int maxx = minx + projectileSize;
+    int miny = position.y + (16 - projectileSize)/2.f;
+    int maxy = miny + projectileSize;
+
+    int playerMinx = playerPos.x + (16 - sizeX) / 2;
+    int playerMaxx = playerMinx + sizeX;
+    int playerMiny = playerPos.y + (16 - sizeY) / 2;
+    int playerMaxy = playerMiny + sizeY;
+
+    if (playerMaxy > miny && maxy > playerMiny && playerMaxx > minx && maxx > playerMinx) return true;
+    return false;
+}
