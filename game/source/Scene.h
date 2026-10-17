@@ -20,7 +20,7 @@
 #include "Info.h"
 
 
-enum class GameState { MENU, GAME };
+enum class GameState { MENU, MENU_IN, MENU_OUT, GAME };
 enum class MenuState { MAIN, LVL1, LVL2, LVL3, LVL4, LVLBOSS, GAMEOVER };
 
 class Scene
@@ -41,6 +41,8 @@ public:
 	void killAllEnemys();
 
 	void enemy_killed();
+
+	void main_menu();
 
 private:
 	void initShaders();
@@ -95,6 +97,9 @@ private:
 	bool activeBoss;
 	MenuState menu_state;
 	GameState state;
+
+	// Atributs per les transicions de menú
+	int menu_in_time, menu_out_time;
 
 };
 #endif // _SCENE_INCLUDE

@@ -15,6 +15,9 @@
 #define VIRTUAL_WIDTH 240.0f //160.0f
 #define VIRTUAL_HEIGHT 168.0f // 112.0f
 
+#define MENU_IN_TIME 2000.f
+#define MENU_OUT_TIME 2000.f
+
 
 // FUNCIONES DE OBJETO
 Scene::Scene(){
@@ -199,6 +202,13 @@ void Scene::init_level(int i) {
 	//cout << enemies << endl;
 
 	player->reset();
+	updateCamera();
+}
+
+void Scene::main_menu() {
+	state = GameState::MENU;
+	menu->setImage(0);
+	menu_state = MenuState::MAIN;
 }
 
 void Scene::spawnPower(EntitySpawn spawn) {
@@ -237,9 +247,24 @@ void Scene::spawnPower(EntitySpawn spawn) {
 void Scene::update(int deltaTime) {
 	currentTime += deltaTime;
 
+	if (menu_out_time > 0) {
+		menu_out_time -= deltaTime;
+		menuCanChange = false;
+	}
+
 	if (state == GameState::MENU) {
 		if (menu_state == MenuState::MAIN) cursor->update(deltaTime);
 		if (Game::instance().getKey(GLFW_KEY_ENTER) && menuCanChange) {
+			state = GameState::MENU_IN;
+			menuCanChange = false;
+			menu_in_time = MENU_IN_TIME;
+		}
+		if (!menuCanChange && !Game::instance().getKey(GLFW_KEY_ENTER)) menuCanChange = true;
+	}
+	if (state == GameState::MENU_IN) {
+		if (menu_in_time < 0) {
+			state = GameState::MENU;
+			menu_out_time = MENU_OUT_TIME;
 			if (menu_state == MenuState::MAIN) {
 				menu->setImage(1);
 				init_level(1);
@@ -250,9 +275,8 @@ void Scene::update(int deltaTime) {
 				level = 1;
 			}
 			else state = GameState::GAME;
-			menuCanChange = false;
 		}
-		if (!menuCanChange && !Game::instance().getKey(GLFW_KEY_ENTER)) menuCanChange = true;
+     	menu_in_time -= deltaTime;
 	}
 
 	else if (state == GameState::GAME) {
@@ -453,13 +477,24 @@ void Scene::render(){
 	if (state == GameState::MENU) {
 		texProgram.use();
 		texProgram.setUniformMatrix4f("projection", glm::mat4(1.0f));
-		texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+		float val = 1.0f;
+		if (menu_out_time > 0) val = 1 - menu_out_time / MENU_OUT_TIME;
+		texProgram.setUniform4f("color", val, val, val, 1.0f);
 		texProgram.setUniformMatrix4f("modelview", glm::mat4(1.0f));
 		texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 		menu->render();
 		if (menu_state == MenuState::MAIN) {
 			cursor->render();
 		}
+	}
+	else if (state == GameState::MENU_IN) {
+		texProgram.use();
+		texProgram.setUniformMatrix4f("projection", glm::mat4(1.0f));
+		float val = menu_in_time / MENU_IN_TIME;
+		texProgram.setUniform4f("color", val, val, val, 1.0f);
+		texProgram.setUniformMatrix4f("modelview", glm::mat4(1.0f));
+		texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
+		menu->render();
 	}
 	else if (state == GameState::GAME) {
 		// Camara respecto size virtual
@@ -469,7 +504,9 @@ void Scene::render(){
 
 		texProgram.use();
 		texProgram.setUniformMatrix4f("projection", projection);
-		texProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
+		float val = 1.0f;
+		if (menu_out_time > 0) val = 1 - menu_out_time / MENU_OUT_TIME;
+		texProgram.setUniform4f("color", val, val, val, 1.0f);
 		modelview = glm::mat4(1.0f);
 		texProgram.setUniformMatrix4f("modelview", modelview);
 		texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
