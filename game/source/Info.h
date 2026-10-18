@@ -30,12 +30,12 @@ private:
 	Texture font;
 
 	// Game info
-	int remainingTime;
-	int lifes;
-	bool heart;
-	int bombs;
-	bool remote;
-	int size;
+	int remainingTime = 0;
+	int lifes = 0;
+	bool heart = 0;
+	int bombs = 0;
+	bool remote = 0;
+	int size = 0;
 };
 
 #endif

@@ -175,7 +175,8 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program){
 				//texCoordTile[0] += halfTexel;
 				//texCoordTile[1] -= halfTexel;
 				// First triangle
-				vertices.push_back(posTile.x); vertices.push_back(posTile.y);
+				vertices.push_back(posTile.x); 
+				vertices.push_back(posTile.y);
 				vertices.push_back(texCoordTile[0].x); vertices.push_back(texCoordTile[0].y);
 				vertices.push_back(posTile.x + blockSize); vertices.push_back(posTile.y);
 				vertices.push_back(texCoordTile[1].x); vertices.push_back(texCoordTile[0].y);

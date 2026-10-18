@@ -60,22 +60,22 @@ void GhostEnemy::updateLogic(int deltaTime, TileMap* map, glm::vec2 player_pos) 
         
         int pos_y = static_cast<int>(position.y); // Rarete
         if (direction.y < 0.f) {
-            if (map->collisionMoveUp(glm::ivec2(position), glm::vec2(ENEMY_SIZE, ENEMY_SIZE), &pos_y)){
+            if (map->collisionMoveUp(glm::ivec2(old_x, position.y), glm::vec2(ENEMY_SIZE, ENEMY_SIZE), &pos_y)){
                 position = glm::vec2(position.x, old_y);
             }
         }
         else if (direction.y > 0.f) {
-            if (map->collisionMoveDown(glm::ivec2(position), glm::vec2(ENEMY_SIZE, ENEMY_SIZE), &pos_y)) {
+            if (map->collisionMoveDown(glm::ivec2(old_x, position.y), glm::vec2(ENEMY_SIZE, ENEMY_SIZE), &pos_y)) {
                 position = position = glm::vec2(position.x, old_y);
             }
         }
         if (direction.x < 0.f) {
-            if (map->collisionMoveLeft(glm::ivec2(position), glm::vec2(ENEMY_SIZE, ENEMY_SIZE))) {
+            if (map->collisionMoveLeft(glm::ivec2(position.x, old_y), glm::vec2(ENEMY_SIZE, ENEMY_SIZE))) {
                 position = glm::vec2(old_x, position.y);
             }
         }
         else if (direction.x > 0.f) {
-            if (map->collisionMoveRight(glm::ivec2(position), glm::vec2(ENEMY_SIZE, ENEMY_SIZE))) {
+            if (map->collisionMoveRight(glm::ivec2(position.x, old_y), glm::vec2(ENEMY_SIZE, ENEMY_SIZE))) {
                 position = glm::vec2(old_x, position.y);
             }
         }

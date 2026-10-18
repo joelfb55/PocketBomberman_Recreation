@@ -4,8 +4,8 @@ TILEMAP
 images/tilesheetlvl3.png 	-- Tilesheet
 8 4 								-- Number of tiles in tilesheet
 122222222224
-3          3
+3H R       3
 3       F  3
-3    8     3
-38  8P  B D3
+3          3
+3R F P  B D3
 322222222223

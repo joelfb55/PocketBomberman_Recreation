@@ -108,3 +108,5 @@ void Cursor::render() {
 	glEnableVertexAttribArray(posLocation);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
+
+Pointing Cursor::getPointing() { return p; }

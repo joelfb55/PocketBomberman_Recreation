@@ -72,6 +72,10 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram){
 		sprite->addKeyframe(DEATH_BY_ENEMY, glm::vec2(0.75f, 0.f));
 		sprite->addKeyframe(DEATH_BY_ENEMY, glm::vec2(0.875, 0.f));
 
+		// Win
+		sprite->setAnimationSpeed(WIN, 1);
+		sprite->addKeyframe(WIN, glm::vec2(0.875f, 0.5f));
+
 	// Activamos la primera animacion
 	sprite->changeAnimation(0);
 
@@ -221,7 +225,7 @@ void Player::registerBomb() { activeBombs++; }
 void Player::onBombExploded() { activeBombs = glm::max(0, activeBombs - 1); }
 
 // Poderes
-void Player::addMaxBomb() { maxBombs++; }
+void Player::addMaxBomb() { if(maxBombs < 4) maxBombs++; }
 void Player::addExplosionRadius() { explosionRadius++; }
 void Player::activateHeart() { heart = true; }
 void Player::activateRemote() { remoteExplosion = true; };
@@ -285,3 +289,5 @@ void Player::setGodMode() { godMode = !godMode;}
 int Player::getMaxBombs() { return maxBombs; }
 bool Player::isHeartActive() { return heart; }
 bool Player::isRemoteActive() { return remoteExplosion; }
+
+void Player::win() { sprite->changeAnimation(WIN); }

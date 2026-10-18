@@ -15,8 +15,10 @@
 #define VIRTUAL_WIDTH 240.0f //160.0f
 #define VIRTUAL_HEIGHT 168.0f // 112.0f
 
-#define MENU_IN_TIME 1.f
-#define MENU_OUT_TIME 1.f
+#define MENU_IN_TIME 1000.f
+#define MENU_OUT_TIME 1000.f
+
+#define CELEBRATION_TIME 1000.f;
 
 
 // FUNCIONES DE OBJETO
@@ -269,9 +271,23 @@ void Scene::update(int deltaTime) {
 		if (menu_in_time < 0) {
 			state = GameState::MENU;
 			menu_out_time = MENU_OUT_TIME;
-			if (menu_state == MenuState::MAIN) {
-				menu->setImage(1);
-				init_level(1);
+			if (menu_state == MenuState::MAIN){
+				Pointing aux = cursor->getPointing();
+				if (aux == Pointing::PLAY) {
+					menu->setImage(1);
+					init_level(1);
+				}
+				else if (aux == Pointing::CREDITS) {
+					menu->setImage(8);
+					menu_state = MenuState::CREDITS;
+				}
+				else if (aux == Pointing::INST) {
+					menu->setImage(7);
+					menu_state = MenuState::INSTR;
+				}
+			}
+			else if (menu_state == MenuState::CREDITS || menu_state == MenuState::INSTR) {
+				main_menu();
 			}
 			else if (menu_state == MenuState::GAMEOVER) {
 				menu->setImage(0);
@@ -306,14 +322,6 @@ void Scene::update(int deltaTime) {
 			player->die(false, deltaTime);
 			level_time = 1 * 60000;
 		}
-
-		// Spawneamos todos los powerups que se hayan descubierto.
-		std::queue<EntitySpawn> powers = map->getPowerUpSpawns();
-		while (!powers.empty()) {
-			spawnPower(powers.front());
-			powers.pop();			
-		}
-		map->resetPowers();
 
 		// Si el player quiere poner bomba
 		if (player->wantsToGenerateABomb()) {
@@ -361,7 +369,7 @@ void Scene::update(int deltaTime) {
 		}
 
 		// Actualizar bombas activas
-		if (!remote_cooldown && Game::instance().getKey(GLFW_KEY_C)) {
+		if (!remote_cooldown && activeBombs.size() > 0 && Game::instance().getKey(GLFW_KEY_C)) {
 			explode_first_bomb = true;
 			remote_cooldown = true;
 		}
@@ -418,11 +426,26 @@ void Scene::update(int deltaTime) {
 			if (boss->checkCollision(player->getPosition(), glm::ivec2(16, 16))) { // Tambien checkea los proyectiles.
 				player->die(false, deltaTime);
 			}
+			if (boss->isDead()) {
+				state = GameState::WIN;
+				celebration_time = CELEBRATION_TIME;
+				player->win();
+			}
 		}
 
 		// Actualizar explosiones
 		for (auto it = activeExplosions.begin(); it != activeExplosions.end();) {
 			(*it)->update(deltaTime);
+
+			// Spawneamos todos los powerups que se hayan descubierto con la explosión
+			std::queue<EntitySpawn> powers = map->getPowerUpSpawns();
+			while (!powers.empty()) {
+				std::cout << powers.size() << endl;
+				spawnPower(powers.front());
+				powers.pop();
+			}
+			map->resetPowers();
+			
 
 			// Deteccion daño player
 			if ((*it)->hitsTile(player->getBombTilePosition(map->getTileSize()))) {
@@ -519,6 +542,15 @@ void Scene::update(int deltaTime) {
 		}
 		updateCamera();
 	}
+
+	else if (state == GameState::WIN) {
+		if (celebration_time > 0) celebration_time -= deltaTime;
+		else {
+			menu_in_time = MENU_IN_TIME;
+			state = GameState::MENU_OUT_GAME;
+		}
+
+	}
 }
 
 void Scene::render(){
@@ -545,7 +577,7 @@ void Scene::render(){
 		texProgram.setUniform2f("texCoordDispl", 0.f, 0.f);
 		menu->render();
 	}
-	else if (state == GameState::GAME || state == GameState::MENU_OUT_GAME) {
+	else if (state == GameState::GAME || state == GameState::MENU_OUT_GAME || state == GameState::WIN) {
 		// Camara respecto size virtual
 		projection = glm::ortho(cameraPos.x, cameraPos.x + VIRTUAL_WIDTH,
 			cameraPos.y + VIRTUAL_HEIGHT, cameraPos.y);

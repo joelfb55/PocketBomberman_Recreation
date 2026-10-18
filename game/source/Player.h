@@ -7,7 +7,7 @@
 
 
 enum PlayerAnims {	// Animaciones posibles
-	STAND, MOVE, JUMP, FALL, DEATH_BY_BOMB, DEATH_BY_ENEMY
+	STAND, MOVE, JUMP, FALL, DEATH_BY_BOMB, DEATH_BY_ENEMY, WIN
 };
 
 class Player
@@ -49,6 +49,8 @@ public:
 	void setTileMap(TileMap *tileMap);
 	void setPosition(const glm::vec2 &pos);
 	void setGodMode();
+
+	void win();
 	
 private:
 	// Render

@@ -18,6 +18,8 @@ void Menu::init(ShaderProgram& program) {
 	Lvl4.loadFromFile("images/menu4.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	LvlBoss.loadFromFile("images/menu5.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	gameOver.loadFromFile("images/menu6.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	instructionsMenu.loadFromFile("images/menu7.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	creditsMenu.loadFromFile("images/menu8.png", TEXTURE_PIXEL_FORMAT_RGBA);
 
 	// First triangle
 	vertices.push_back(-1.f); vertices.push_back(-1.f);
@@ -82,6 +84,14 @@ void Menu::setImage(int i) {
 	}
 	case 6: {
 		renderImage = gameOver;
+		break;
+	}
+	case 7: {
+		renderImage = instructionsMenu;
+		break;
+	}
+	case 8: {
+		renderImage = creditsMenu;
 		break;
 	}
 	}

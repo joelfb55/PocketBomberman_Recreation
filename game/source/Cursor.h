@@ -17,14 +17,16 @@ public:
 	void update(int deltaTime);
 	void render();
 
+	Pointing getPointing();
+
 private:
 	GLuint vao;
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
 	ShaderProgram simple;
 
-	Pointing p;
-	bool canChangeUp, canChangeDown;
+	Pointing p = Pointing::PLAY;
+	bool canChangeUp = true, canChangeDown = true;
 
 	glm::mat4 pointingPlay, pointingInst, pointingCredits;
 };

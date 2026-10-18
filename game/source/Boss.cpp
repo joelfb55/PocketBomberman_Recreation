@@ -271,3 +271,5 @@ bool Boss::checkCollision(const glm::vec2& playerPos, const glm::ivec2& playerSi
     return (std::abs((position.x + BOSS_SIZE / 2.f) - (playerPos.x + playerSize.x / 2.f)) < (BOSS_SIZE - BOSS_HITBOX_REDUCTION) &&
         std::abs((position.y + BOSS_SIZE / 2.f) - (playerPos.y + playerSize.y / 2.f)) < (BOSS_SIZE - BOSS_HITBOX_REDUCTION));
 }
+
+bool Boss::isDead() { return state == BossState::DEAD; }

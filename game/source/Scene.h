@@ -20,8 +20,8 @@
 #include "Info.h"
 
 
-enum class GameState { MENU, MENU_IN, MENU_OUT_GAME, MENU_OUT, GAME };
-enum class MenuState { MAIN, LVL1, LVL2, LVL3, LVL4, LVLBOSS, GAMEOVER };
+enum class GameState { MENU, MENU_IN, MENU_OUT_GAME, MENU_OUT, GAME, WIN };
+enum class MenuState { MAIN, CREDITS, INSTR, WIN, TIME, LVL1, LVL2, LVL3, LVL4, LVLBOSS, GAMEOVER };
 
 class Scene
 {
@@ -77,6 +77,7 @@ private:
 	bool dropBombKeyPressed = false;
 	glm::vec2 cameraPos;
 	glm::vec2 playerSpawnPoint;
+	int celebration_time = 0;
 
 	// Elements de menú
 	Menu* menu;

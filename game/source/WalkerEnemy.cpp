@@ -22,9 +22,9 @@ void WalkerEnemy::init(const glm::vec2& pos, const glm::ivec2& tileMapDispl, Sha
     sprite->setNumberAnimations(2);
 
     // Caminar
-    sprite->setAnimationSpeed(0, 6);
-    sprite->addKeyframe(0, glm::vec2(0.f, 0.f));
+    sprite->setAnimationSpeed(0, 4);
     sprite->addKeyframe(0, glm::vec2(0.25f, 0.f));
+    sprite->addKeyframe(0, glm::vec2(0.5f, 0.f));
 
     // Muerte
     sprite->setAnimationSpeed(1, 8);

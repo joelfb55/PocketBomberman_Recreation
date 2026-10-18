@@ -33,9 +33,8 @@ public:
     Minion* getLeftMinion();
     Minion* getRightMinion();
 
-    void  kill();
-    bool isAlive() const;
-    bool isReallyAlive() const;
+    // Consultoras
+    bool isDead();
 
 private:
     // Render
