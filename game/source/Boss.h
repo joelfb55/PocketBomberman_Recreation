@@ -29,6 +29,8 @@ public:
     void getsDamage();
     bool checkCollision(const glm::vec2& playerPos, const glm::ivec2& playerSize) const;
 
+    void kill();
+
     // getters
     Minion* getLeftMinion();
     Minion* getRightMinion();

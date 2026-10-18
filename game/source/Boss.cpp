@@ -248,14 +248,16 @@ void Boss::getsDamage() {
         immunity_time = IMMUNITY_TIME;
         visible_time = VISIBLE_TIME;
         std::cerr << vida << std::endl;
-        if (vida == 0) {
-            state = BossState::DYING;
-            deathTimer = DYING_TIME;
-            if (leftMinion->getState() == MinionState::ACTIVE) leftMinion->kill();
-            if (rightMinion->getState() == MinionState::ACTIVE) rightMinion->kill();
-            sprite->changeAnimation(2);
-        }
+        if (vida == 0) kill();
     }
+}
+
+void Boss::kill() {
+    state = BossState::DYING;
+    deathTimer = DYING_TIME;
+    if (leftMinion->getState() == MinionState::ACTIVE) leftMinion->kill();
+    if (rightMinion->getState() == MinionState::ACTIVE) rightMinion->kill();
+    sprite->changeAnimation(2);
 }
 
 Minion* Boss::getLeftMinion() { return leftMinion; }

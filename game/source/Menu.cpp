@@ -20,6 +20,7 @@ void Menu::init(ShaderProgram& program) {
 	gameOver.loadFromFile("images/menu6.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	instructionsMenu.loadFromFile("images/menu7.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	creditsMenu.loadFromFile("images/menu8.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	winMenu.loadFromFile("images/menu10.png", TEXTURE_PIXEL_FORMAT_RGBA);
 
 	// First triangle
 	vertices.push_back(-1.f); vertices.push_back(-1.f);
@@ -92,6 +93,10 @@ void Menu::setImage(int i) {
 	}
 	case 8: {
 		renderImage = creditsMenu;
+		break;
+	}
+	case 10: {
+		renderImage = winMenu;
 		break;
 	}
 	}

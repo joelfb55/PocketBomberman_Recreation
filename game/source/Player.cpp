@@ -13,9 +13,11 @@
 #define JUMP_HEIGHT 3*16		// bloques * pixeles_bloque
 
 #define HEART_IMMUNITY_TIME 1000.f
+#define VISIBLE_TIME 10
+#define INVISIBLE_TIME 10
 
 #define DEATH_ANIMATION_TIME 1000.f
-#define DEATH_BOMB_ANIMATION_TIME 1000.f
+#define DEATH_BOMB_ANIMATION_TIME 900.f
 
 // FUNCIONES DE OBJETO
 Player::Player(){
@@ -30,6 +32,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram){
 	bJumping = false;
 	bDead = false;
 	canJump = true;
+	win_state = false;
 
 	// Cargar textura
 	spritesheet.loadFromFile("images/bomberman.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -40,7 +43,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram){
 
 	// (pixeles personaje, tam celda[0,1], ... )
 	sprite = Sprite::createSprite(glm::ivec2(PLAYER_SIZE, PLAYER_SIZE), glm::vec2(0.125, 0.5), &spritesheet, &shaderProgram);
-	sprite->setNumberAnimations(6);
+	sprite->setNumberAnimations(7);
 		
 		// Parado
 		sprite->setAnimationSpeed(STAND, 8);				// (ID, fps)
@@ -73,7 +76,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram){
 		sprite->addKeyframe(DEATH_BY_ENEMY, glm::vec2(0.875, 0.f));
 
 		// Win
-		sprite->setAnimationSpeed(WIN, 1);
+		sprite->setAnimationSpeed(WIN, 8);
 		sprite->addKeyframe(WIN, glm::vec2(0.875f, 0.5f));
 
 	// Activamos la primera animacion
@@ -87,6 +90,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram){
 // FUNCIONES DE JUEGO
 void Player::update(int deltaTime){
 	sprite->update(deltaTime);				// Actualiza la animacion activa a su siguiente KeyFrame (segun tiempo)
+	if (win_state) return;
 
 	// Muerto
 	if (bDead) {
@@ -95,6 +99,20 @@ void Player::update(int deltaTime){
 	}
 
 	if (immunity) {
+		if (visible) {
+			if (visible_time < 0) {
+				visible = false;
+				invisible_time = INVISIBLE_TIME;
+			}
+			else visible_time -= deltaTime;
+		}
+		else {
+			if (invisible_time < 0) {
+				visible = true;
+				visible_time = VISIBLE_TIME;
+			}
+			else invisible_time -= deltaTime;
+		}
 		if (heart_immunity > HEART_IMMUNITY_TIME) {
 			heart_immunity = 0;
 			immunity = false;
@@ -203,7 +221,7 @@ void Player::update(int deltaTime){
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
 void Player::render(){
-	sprite->render();
+	if(!immunity || visible) sprite->render();
 }
 
 // FUNCIONES AUXILIARES
@@ -237,6 +255,9 @@ void Player::die(bool by_bomb, int deltaTime) {
 	if (bDead) return;
 	if (heart) {
 		immunity = true;
+		heart_immunity = 0;
+		visible = true;
+		visible_time = VISIBLE_TIME;
 		heart = false;
 		return;
 	}
@@ -290,4 +311,7 @@ int Player::getMaxBombs() { return maxBombs; }
 bool Player::isHeartActive() { return heart; }
 bool Player::isRemoteActive() { return remoteExplosion; }
 
-void Player::win() { sprite->changeAnimation(WIN); }
+void Player::win() { 
+	sprite->changeAnimation(WIN); 
+	win_state = true;
+}

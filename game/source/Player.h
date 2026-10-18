@@ -77,9 +77,12 @@ private:
 	bool heart = false;
 	bool immunity = false;
 	float heart_immunity;
+	bool visible;
+	int visible_time = 0, invisible_time = 0;
 
 	int vidas = 3;
 	float deathTimer = 0.f;
+	bool win_state;
 
 };
 

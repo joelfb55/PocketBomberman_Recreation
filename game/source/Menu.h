@@ -20,7 +20,7 @@ private:
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
 	Texture renderImage;
-	Texture mainMenu, instructionsMenu, creditsMenu, Lvl1, Lvl2, Lvl3, Lvl4, LvlBoss, gameOver;
+	Texture mainMenu, instructionsMenu, creditsMenu, Lvl1, Lvl2, Lvl3, Lvl4, LvlBoss, gameOver, winMenu;
 };
 
 #endif

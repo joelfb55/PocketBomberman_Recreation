@@ -18,7 +18,7 @@
 #define MENU_IN_TIME 1000.f
 #define MENU_OUT_TIME 1000.f
 
-#define CELEBRATION_TIME 1000.f;
+#define CELEBRATION_TIME 5000.f;
 
 
 // FUNCIONES DE OBJETO
@@ -286,7 +286,7 @@ void Scene::update(int deltaTime) {
 					menu_state = MenuState::INSTR;
 				}
 			}
-			else if (menu_state == MenuState::CREDITS || menu_state == MenuState::INSTR) {
+			else if (menu_state == MenuState::CREDITS || menu_state == MenuState::INSTR || menu_state == MenuState::WIN) {
 				main_menu();
 			}
 			else if (menu_state == MenuState::GAMEOVER) {
@@ -301,7 +301,11 @@ void Scene::update(int deltaTime) {
 
 	else if (state == GameState::MENU_OUT_GAME) {
 		if (menu_in_time < 0) {
-			if (player->getVidas() <= 0) {
+			if (menu_state == MenuState::WIN) {
+				state = GameState::MENU;
+				menu->setImage(10);
+			}
+			else if (player->getVidas() <= 0) {
 				state = GameState::MENU;
 				menu_state = MenuState::GAMEOVER;
 				menu->setImage(6);
@@ -428,6 +432,8 @@ void Scene::update(int deltaTime) {
 			}
 			if (boss->isDead()) {
 				state = GameState::WIN;
+				menu_state = MenuState::WIN;
+				menu->setImage(10);
 				celebration_time = CELEBRATION_TIME;
 				player->win();
 			}
@@ -544,6 +550,7 @@ void Scene::update(int deltaTime) {
 	}
 
 	else if (state == GameState::WIN) {
+		player->update(deltaTime);
 		if (celebration_time > 0) celebration_time -= deltaTime;
 		else {
 			menu_in_time = MENU_IN_TIME;
@@ -611,7 +618,7 @@ void Scene::render(){
 			boss->render();
 		}
 
-		if(state == GameState::GAME) player->render();
+		if(state == GameState::GAME || state == GameState::WIN) player->render();
 
 		// HUD
 		info->render();
@@ -660,6 +667,7 @@ void Scene::killAllEnemys() {
 		e->kill();
 		--enemies;
 	}
+	if (activeBoss) boss->kill();
 	// Faltara abrir puerta o asi
 }
 
