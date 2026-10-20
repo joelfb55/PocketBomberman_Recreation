@@ -98,6 +98,7 @@ private:
 	bool activeBoss;
 	MenuState menu_state;
 	GameState state;
+	bool door_closed;
 
 	// Atributs per les transicions de menú
 	int menu_in_time, menu_out_time;

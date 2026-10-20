@@ -28,7 +28,7 @@ Boss::~Boss() {
 // Inicialicación del boss
 void Boss::init(const glm::vec2& pos, const glm::ivec2& tileMapDispl, ShaderProgram& shaderProgram) {
     position = pos;
-    vida = 1;
+    vida = 2;
     std::srand(std::time(nullptr));
 
     tileDispl = tileMapDispl;
@@ -184,7 +184,7 @@ void Boss::update(int deltaTime, TileMap* map, glm::vec2 player_pos) {
     else {
         immunity = false;
     }
-    if (immunity){
+    if (immunity) {
         if (visible) {
             if (visible_time < 0) {
                 visible = false;
@@ -200,6 +200,7 @@ void Boss::update(int deltaTime, TileMap* map, glm::vec2 player_pos) {
             else invisible_time -= deltaTime;
         }
     }
+    else visible = true;
     if (minion_living_time > 0) {
         minion_living_time -= deltaTime;
     }

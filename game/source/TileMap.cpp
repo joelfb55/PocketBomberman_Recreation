@@ -84,7 +84,7 @@ bool TileMap::loadLevel(const string &levelFile){
 	
 	map = new int[mapSize.x * mapSize.y];
 	door_presence = false;
-	powerups = new EntityType[mapSize.x * mapSize.y, EntityType::NOTHING];
+	powerups = new EntityType[mapSize.x * mapSize.y];
 	for(int j=0; j<mapSize.y; j++)
 	{
 		for(int i=0; i<mapSize.x; i++)

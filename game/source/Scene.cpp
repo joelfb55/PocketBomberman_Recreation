@@ -74,6 +74,7 @@ void Scene::init(){
 	remote_cooldown = false;
 	level = 1;
 	activeBoss = false;
+	door_closed = true;
 }
 
 void Scene::initShaders() {
@@ -142,6 +143,9 @@ void Scene::init_level(int i) {
 	state = GameState::MENU;
 	enemies = 0;
 	activeBoss = false;
+
+	// Reset puerta
+	door_closed = true;
 
 	// Mapa
 	map = TileMap::createTileMap("levels/level" + to_string(i) + ".txt", glm::vec2(SCREEN_X, SCREEN_Y), texProgram);
@@ -528,13 +532,14 @@ void Scene::update(int deltaTime) {
 		}
 
 		// Puerta
-		if (enemies == 0) {
+		if (enemies == 0 && door_closed) {
 			map->open_door();
-			if (map->doorCollision(player->getPosition())) { // Igual que arriba.
-				++level;
-				state = GameState::MENU_OUT_GAME;
-				menu_in_time = MENU_IN_TIME;
-			}
+			door_closed = false;
+		}
+		if (!door_closed && map->doorCollision(player->getPosition())) { // Igual que arriba.
+			++level;
+			state = GameState::MENU_OUT_GAME;
+			menu_in_time = MENU_IN_TIME;
 		}
 
 		player->update(deltaTime);
