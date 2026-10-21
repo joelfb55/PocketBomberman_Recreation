@@ -12,8 +12,8 @@
 #define SCREEN_X 16
 #define SCREEN_Y 16
 
-#define VIRTUAL_WIDTH 240.0f //160.0f
-#define VIRTUAL_HEIGHT 168.0f // 112.0f
+#define VIRTUAL_WIDTH  180.0f
+#define VIRTUAL_HEIGHT 126.0f
 
 #define MENU_IN_TIME 1000.f
 #define MENU_OUT_TIME 1000.f
@@ -385,34 +385,46 @@ void Scene::update(int deltaTime) {
 			(*it)->updatePlayerOverlap(player->getPosition(), glm::ivec2(16, 16), map->getTileSize());
 
 			(*it)->update(deltaTime);
-			if (player->isRemoteActive()) {
-				if (explode_first_bomb) {
-					player->onBombExploded();
-					Explosion* expl = new Explosion();
-					expl->init((*it)->getTilePos(), player->getExplosionRadius(), texProgram, map);
-					activeExplosions.push_back(expl);
+			if ((*it)->isPrematureExploded()) {
+				player->onBombExploded();
 
-					delete* it;
-					it = activeBombs.erase(it);
-					explode_first_bomb = false;
-				}
-				else {
-					++it;
-				}
+				Explosion* expl = new Explosion();
+				expl->init((*it)->getTilePos(), player->getExplosionRadius(), texProgram, map);
+				activeExplosions.push_back(expl);
+
+				delete* it;
+				it = activeBombs.erase(it);
 			}
 			else {
-				if ((*it)->isExploded()) {
-					player->onBombExploded();
+				if (player->isRemoteActive()) {
+					if (explode_first_bomb) {
+						player->onBombExploded();
+						Explosion* expl = new Explosion();
+						expl->init((*it)->getTilePos(), player->getExplosionRadius(), texProgram, map);
+						activeExplosions.push_back(expl);
 
-					Explosion* expl = new Explosion();
-					expl->init((*it)->getTilePos(), player->getExplosionRadius(), texProgram, map);
-					activeExplosions.push_back(expl);
-
-					delete* it;
-					it = activeBombs.erase(it);
+						delete* it;
+						it = activeBombs.erase(it);
+						explode_first_bomb = false;
+					}
+					else {
+						++it;
+					}
 				}
 				else {
-					++it;
+					if ((*it)->isExploded()) {
+						player->onBombExploded();
+
+						Explosion* expl = new Explosion();
+						expl->init((*it)->getTilePos(), player->getExplosionRadius(), texProgram, map);
+						activeExplosions.push_back(expl);
+
+						delete* it;
+						it = activeBombs.erase(it);
+					}
+					else {
+						++it;
+					}
 				}
 			}
 		}
@@ -455,7 +467,13 @@ void Scene::update(int deltaTime) {
 				powers.pop();
 			}
 			map->resetPowers();
-			
+
+			// Deteccion daño a otras bombas
+			for (auto b = activeBombs.begin(); b != activeBombs.end(); ++b) {
+				if ((*it)->hitsTile((*b)->getTilePos())){
+					(*b)->premature_explode();
+				}
+			}
 
 			// Deteccion daño player
 			if ((*it)->hitsTile(player->getBombTilePosition(map->getTileSize()))) {
@@ -545,7 +563,7 @@ void Scene::update(int deltaTime) {
 		player->update(deltaTime);
 
 		// Actualitzem HUD
-		info->update(deltaTime, player, level_time);
+		info->update(deltaTime, player, level_time, enemies);
 
 		// Para debug
 		if (Game::instance().getKey(GLFW_KEY_J)) {
@@ -640,8 +658,8 @@ void Scene::updateCamera(){
 	// Margenes
 	float deadzoneLeft = cameraPos.x + (VIRTUAL_WIDTH * 0.25f); 
 	float deadzoneRight = cameraPos.x + (VIRTUAL_WIDTH * 0.5f);
-	float deadzoneTop = cameraPos.y + (VIRTUAL_HEIGHT * 0.35f);
-	float deadzoneBottom = cameraPos.y + (VIRTUAL_HEIGHT * 0.6f);
+	float deadzoneTop = cameraPos.y + (VIRTUAL_HEIGHT * 0.3f);
+	float deadzoneBottom = cameraPos.y + (VIRTUAL_HEIGHT * 0.35f);
 
 	// Movimiento camara
 	if (playerCenter.x < deadzoneLeft)

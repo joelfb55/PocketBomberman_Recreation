@@ -15,7 +15,7 @@ public:
 	~Info();
 
 	void init(ShaderProgram& program);
-	void update(int deltaTime, Player* player, int level_time);
+	void update(int deltaTime, Player* player, int level_time, int remaining_enemies);
 	void render();
 
 private:
@@ -36,6 +36,7 @@ private:
 	int bombs = 0;
 	bool remote = 0;
 	int size = 0;
+	int enemies;
 };
 
 #endif

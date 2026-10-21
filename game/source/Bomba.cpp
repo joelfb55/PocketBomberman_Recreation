@@ -59,6 +59,7 @@ void Bomba::render() const{
 // FUNCIONES AUXILIARES
 // Estados
 bool Bomba::isExploded() const { return bExploded; }
+bool Bomba::isPrematureExploded() const { return prematureExpl; }
 bool Bomba::isSolid() const { return !playerInside; }
 
 // Getters
@@ -75,5 +76,9 @@ void Bomba::updatePlayerOverlap(const glm::vec2& playerPos, const glm::ivec2& pl
 	if (!overlapX || !overlapY) {
 		playerInside = false;
 	}
+}
+
+void Bomba::premature_explode() {
+	prematureExpl = true;
 }
 

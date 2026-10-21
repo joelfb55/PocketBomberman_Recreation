@@ -16,7 +16,9 @@ public:
 	void render() const;
 
 	// FUNCIONES AUXILIARES
+	void premature_explode();
 	bool isExploded() const;
+	bool isPrematureExploded() const;
 	bool isSolid() const;
 	glm::ivec2 getTilePos() const;
 	void updatePlayerOverlap(const glm::vec2& playerPos, const glm::ivec2& playerSize, int tileSize);
@@ -30,6 +32,7 @@ private:
 	// Estado
 	bool playerInside = true;
 	bool bExploded = false;
+	bool prematureExpl = false;
 
 	// Atributos
 	float timer;             // Tiempo para la explosión (mlsec)

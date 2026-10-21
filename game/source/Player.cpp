@@ -51,8 +51,8 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram){
 		
 		// Corriendo
 		sprite->setAnimationSpeed(MOVE, 10);
-		sprite->addKeyframe(MOVE, glm::vec2(0.f, 0.f));
 		sprite->addKeyframe(MOVE, glm::vec2(0.125f, 0.f));
+		sprite->addKeyframe(MOVE, glm::vec2(0.f, 0.f));
 		sprite->addKeyframe(MOVE, glm::vec2(0.25f, 0.f));
 
 		// Saltando
@@ -244,7 +244,7 @@ void Player::onBombExploded() { activeBombs = glm::max(0, activeBombs - 1); }
 
 // Poderes
 void Player::addMaxBomb() { if(maxBombs < 4) maxBombs++; }
-void Player::addExplosionRadius() { explosionRadius++; }
+void Player::addExplosionRadius() { if(explosionRadius < 4) explosionRadius++; }
 void Player::activateHeart() { heart = true; }
 void Player::activateRemote() { remoteExplosion = true; };
 
