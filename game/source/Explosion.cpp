@@ -62,43 +62,43 @@ bool Explosion::hitsTile(const glm::ivec2& targetTile) const {
 
 // Otras
 Sprite* Explosion::createFireSprite(ExplosionsAnims anim, const glm::ivec2& tilePos, ShaderProgram& shaderProgram) {
-    Sprite* s = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(16.f / 112, 16.f / 48), &spritesheet, &shaderProgram);
+    Sprite* s = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.25, 0.125), &spritesheet, &shaderProgram);
     s->setNumberAnimations(7);
 
     s->setAnimationSpeed(CENTRO, 10);
     s->addKeyframe(CENTRO, glm::vec2(0.f, 0.f));
-    s->addKeyframe(CENTRO, glm::vec2(0.f, 16.f / 48));
-    s->addKeyframe(CENTRO, glm::vec2(0.f, 2 * 16.f / 48));
+    s->addKeyframe(CENTRO, glm::vec2(0.f, 0.125));
+    s->addKeyframe(CENTRO, glm::vec2(0.f, 0.25));
 
     s->setAnimationSpeed(MEDIO_H, 10);
-    s->addKeyframe(MEDIO_H, glm::vec2(4 * 16.f / 112, 0.f));
-    s->addKeyframe(MEDIO_H, glm::vec2(16.f / 112, 16.f / 48));
-    s->addKeyframe(MEDIO_H, glm::vec2(16.f / 112, 2 * 16.f / 48));
+    s->addKeyframe(MEDIO_H, glm::vec2(0.25, 0.0));
+    s->addKeyframe(MEDIO_H, glm::vec2(0.25, 0.125));
+    s->addKeyframe(MEDIO_H, glm::vec2(0.25, 0.25));
 
     s->setAnimationSpeed(MEDIO_V, 10);
-    s->addKeyframe(MEDIO_V, glm::vec2(6 * 16.f / 112.f, 0.f));
-    s->addKeyframe(MEDIO_V, glm::vec2(2 * 16.f / 112, 16.f / 48));
-    s->addKeyframe(MEDIO_V, glm::vec2(3 * 16.f / 112, 2 * 16.f / 48));
+    s->addKeyframe(MEDIO_V, glm::vec2(0.5, 0.375));
+    s->addKeyframe(MEDIO_V, glm::vec2(0.25, 0.375));
+    s->addKeyframe(MEDIO_V, glm::vec2(0.0, 0.375));
 
     s->setAnimationSpeed(FINAL_R, 10);
-    s->addKeyframe(FINAL_R, glm::vec2(3 * 16.f / 112.f, 0.f));
-    s->addKeyframe(FINAL_R, glm::vec2(3 * 16.f / 112.f, 16.f / 48));
-    s->addKeyframe(FINAL_R, glm::vec2(3 * 16.f / 112.f, 2 * 16.f / 48));
+    s->addKeyframe(FINAL_R, glm::vec2(0.5, 0.0));
+    s->addKeyframe(FINAL_R, glm::vec2(0.5, 0.125));
+    s->addKeyframe(FINAL_R, glm::vec2(0.5, 0.25));
 
     s->setAnimationSpeed(FINAL_L, 10);
-    s->addKeyframe(FINAL_L, glm::vec2(5 * 16.f / 112.f, 0.f));
-    s->addKeyframe(FINAL_L, glm::vec2(6 * 16.f / 112.f, 16.f / 48));
-    s->addKeyframe(FINAL_L, glm::vec2(6 * 16.f / 112.f, 2 * 16.f / 48));
+    s->addKeyframe(FINAL_L, glm::vec2(0.75, 0.0));
+    s->addKeyframe(FINAL_L, glm::vec2(0.75, 0.125));
+    s->addKeyframe(FINAL_L, glm::vec2(0.75, 0.25));
 
     s->setAnimationSpeed(FINAL_U, 10);
-    s->addKeyframe(FINAL_U, glm::vec2(2 * 16.f / 112.f, 0.f));
-    s->addKeyframe(FINAL_U, glm::vec2(5 * 16.f / 112.f, 16.f / 48));
-    s->addKeyframe(FINAL_U, glm::vec2(5 * 16.f / 112.f, 2 * 16.f / 48));
+    s->addKeyframe(FINAL_U, glm::vec2(0.5, 0.625));
+    s->addKeyframe(FINAL_U, glm::vec2(0.25, 0.625));
+    s->addKeyframe(FINAL_U, glm::vec2(0.0, 0.625));
 
     s->setAnimationSpeed(FINAL_D, 10);
-    s->addKeyframe(FINAL_D, glm::vec2(16.f / 112.f, 0.f));
-    s->addKeyframe(FINAL_D, glm::vec2(4 * 16.f / 112.f, 16.f / 48));
-    s->addKeyframe(FINAL_D, glm::vec2(4 * 16.f / 112.f, 2 * 16.f / 48));
+    s->addKeyframe(FINAL_D, glm::vec2(0.5, 0.5));
+    s->addKeyframe(FINAL_D, glm::vec2(0.25, 0.5));
+    s->addKeyframe(FINAL_D, glm::vec2(0.0, 0.5));
 
     s->changeAnimation(anim);
     s->setPosition(glm::vec2(float(tilePos.x + 16.f), float(tilePos.y + 16.f)));

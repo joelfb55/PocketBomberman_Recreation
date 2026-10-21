@@ -217,6 +217,7 @@ void Info::render() {
 	modelview = glm::mat4(1.0f);
 	modelview = glm::translate(modelview, glm::vec3(9.75, 0.5, 0.0));
 	modelview = glm::scale(modelview, glm::vec3(0.70, 0.70, 1.0));
+	texProgram->setUniform2f("texCoordDispl", 2 / MIDA_FONT_X, 2 / MIDA_FONT_Y);
 	texProgram->setUniformMatrix4f("modelview", modelview);
 	texProgram->setUniform4f("color", 0.f, 0.f, 0.f, 1.0f);
 	glDrawArrays(GL_TRIANGLES, 0, 6); // Down
