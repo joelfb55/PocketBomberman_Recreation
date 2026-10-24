@@ -8,10 +8,10 @@
 #define HITBOX_REDUCTION 2		// Indica cuantos pixeles quitamos al size para las colisiones de amplitud (x)
 #define MOVEMENT_VELOCITY 1		// [pxls]
 
-/*
+
 #define GRAVITY 0.2
 #define JUMP_VELOCITY 4
-*/
+
 
 #define JUMP_ANGLE_STEP 4
 #define FALL_STEP 4
@@ -160,14 +160,15 @@ void Player::update(int deltaTime){
 		sprite->changeAnimation(STAND);
 	}
 
-	/*
+	
 	// Update vertical position
 	if (map->collisionMoveDown(glm::ivec2(posPlayer.x + HITBOX_REDUCTION, posPlayer.y + MOVEMENT_VELOCITY), glm::ivec2(PLAYER_SIZE - 2 * HITBOX_REDUCTION, PLAYER_SIZE), &posPlayer.y)) {
-		vertical_velocity = 0;
+		if (vertical_velocity > 0) vertical_velocity = 0;
+		if (vertical_velocity < 0) sprite->changeAnimation(JUMP);
 		// Si queremos saltar...
 		if (Game::instance().getKey(GLFW_KEY_X) && canJump) {
 			vertical_velocity = -JUMP_VELOCITY;
-			cout << vertical_velocity << endl;
+			//cout << vertical_velocity << endl;
 			sprite->changeAnimation(JUMP);
 			canJump = false;
 		}
@@ -176,9 +177,10 @@ void Player::update(int deltaTime){
 		}
 	}
 	else {
-		if (vertical_velocity < 1) sprite->changeAnimation(JUMP);
+		if (vertical_velocity < 0) sprite->changeAnimation(JUMP);
 		else sprite->changeAnimation(FALL);
 		vertical_velocity += GRAVITY;
+		if (vertical_velocity > JUMP_VELOCITY) vertical_velocity = JUMP_VELOCITY;
 	}
 	posPlayer.y = posPlayer.y + vertical_velocity;
 
@@ -188,8 +190,8 @@ void Player::update(int deltaTime){
 		vertical_velocity = 0;
 		sprite->changeAnimation(FALL);
 	}
-	*/
 	
+	/*
 	// Salto 
 	if(bJumping){
 		jumpAngle += JUMP_ANGLE_STEP;	// sumamos altura
@@ -253,6 +255,7 @@ void Player::update(int deltaTime){
 			}
 		}
 	}
+	*/
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }
@@ -316,6 +319,7 @@ void Player::reset() {
 	bDead = false;
 	bJumping = false;
 	activeBombs = 0;
+	remoteExplosion = false;
 	sprite->changeAnimation(STAND);
 }
 
@@ -350,4 +354,5 @@ bool Player::isRemoteActive() { return remoteExplosion; }
 void Player::win() { 
 	sprite->changeAnimation(WIN); 
 	win_state = true;
+	gameOverReset();
 }

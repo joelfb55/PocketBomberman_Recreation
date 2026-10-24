@@ -18,6 +18,7 @@ void Menu::init(ShaderProgram& program) {
 	Lvl4.loadFromFile("images/menu4.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	LvlBoss.loadFromFile("images/menu5.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	gameOver.loadFromFile("images/menu6.png", TEXTURE_PIXEL_FORMAT_RGBA);
+	timeOver.loadFromFile("images/menu9.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	instructionsMenu.loadFromFile("images/menu7.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	creditsMenu.loadFromFile("images/menu8.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	winMenu.loadFromFile("images/menu10.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -97,6 +98,10 @@ void Menu::setImage(int i) {
 	}
 	case 10: {
 		renderImage = winMenu;
+		break;
+	}
+	case 11: {
+		renderImage = timeOver;
 		break;
 	}
 	}

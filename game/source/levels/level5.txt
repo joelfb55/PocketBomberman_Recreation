@@ -6,12 +6,12 @@ images/tilesheetlvlboss.png 	-- Tilesheet
 122222222222222223
 4                4
 4                4
-4    bcd   bcd   4
 4                4
 4                4
+4 H           R  4
 4 bcd        bcd 4
 4                4
-4    O           4
+4    O       H   4
 4    bcd   bcd   4
 4                4
 4P               4

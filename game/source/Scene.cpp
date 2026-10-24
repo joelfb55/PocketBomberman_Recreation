@@ -13,7 +13,7 @@
 #define SCREEN_Y 16
 
 #define VIRTUAL_WIDTH  180.0f
-#define VIRTUAL_HEIGHT 135.0f
+#define VIRTUAL_HEIGHT 135.0f 
 
 #define MENU_IN_TIME 1000.f
 #define MENU_OUT_TIME 1000.f
@@ -120,7 +120,8 @@ MenuState Scene::lvl2menu(int i) {
 void Scene::init_level(int i) {
 
 	// Reset timer;
-	level_time = 9*60000; // 3 mins en ms
+	level_time = 0.1*60000; //4 * 60000; // 3 mins en ms
+	timeOut = false;
 
 	// Reset Bombas
 	for (Bomba* bomb : activeBombs) delete bomb;
@@ -298,6 +299,10 @@ void Scene::update(int deltaTime) {
 				menu_state = MenuState::MAIN;
 				level = 1;
 			}
+			else if (menu_state == MenuState::TIMEOVER) {
+				timeOut = false;
+				state = GameState::MENU_OUT_GAME;
+			}
 			else state = GameState::GAME;
 		}
      	menu_in_time -= deltaTime;
@@ -308,6 +313,11 @@ void Scene::update(int deltaTime) {
 			if (menu_state == MenuState::WIN) {
 				state = GameState::MENU;
 				menu->setImage(10);
+			}
+			else if (timeOut) {
+				state = GameState::MENU;
+				menu_state = MenuState::TIMEOVER;
+				menu->setImage(11);
 			}
 			else if (player->getVidas() <= 0) {
 				state = GameState::MENU;
@@ -325,10 +335,10 @@ void Scene::update(int deltaTime) {
 
 	else if (state == GameState::GAME) {
 
-		level_time -= deltaTime;
+		if(!timeOut) level_time -= deltaTime;
 		if (level_time < 0) {
 			player->die(false, deltaTime);
-			level_time = 1 * 60000;
+			timeOut = true;			
 		}
 
 		// Si el player quiere poner bomba
@@ -377,7 +387,7 @@ void Scene::update(int deltaTime) {
 		}
 
 		// Actualizar bombas activas
-		if (!remote_cooldown && activeBombs.size() > 0 && Game::instance().getKey(GLFW_KEY_C)) {
+		if (!remote_cooldown && activeBombs.size() > 0 && player->isRemoteActive() && Game::instance().getKey(GLFW_KEY_C)) {
 			explode_first_bomb = true;
 			remote_cooldown = true;
 		}

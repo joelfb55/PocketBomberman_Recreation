@@ -21,7 +21,7 @@
 
 
 enum class GameState { MENU, MENU_IN, MENU_OUT_GAME, MENU_OUT, GAME, WIN };
-enum class MenuState { MAIN, CREDITS, INSTR, WIN, TIME, LVL1, LVL2, LVL3, LVL4, LVLBOSS, GAMEOVER };
+enum class MenuState { MAIN, CREDITS, INSTR, WIN, TIME, LVL1, LVL2, LVL3, LVL4, LVLBOSS, GAMEOVER, TIMEOVER};
 
 class Scene
 {
@@ -94,6 +94,7 @@ private:
 	// Atributs de control
 	int level;
 	int level_time;
+	bool timeOut;
 	int enemies;
 	bool activeBoss;
 	MenuState menu_state;

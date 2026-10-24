@@ -4,10 +4,10 @@ TILEMAP
 images/tilesheetlvl2.png 	-- Tilesheet
 8 4 								-- Number of tiles in tilesheet
 122222222222222222222222223
-4  j       F          jjjF4
+4  j       j          jjjF4
 4  j                   jjj4
 4    8cd                  4
-4 Y 8q          j   6H6   4
+4 Y 8q   6      j   6H6   4
 4bccq          b9a   7    4
 4               opd  fY   4
 4B     8ccccd        f    4

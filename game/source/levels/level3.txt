@@ -1,11 +1,23 @@
 TILEMAP
-12 6 							-- Size of tile map in tiles
+19 18 							-- Size of tile map in tiles
 16 16 							-- Tile size & block size
 images/tilesheetlvl3.png 	-- Tilesheet
 8 4 								-- Number of tiles in tilesheet
-122222222224
-3H R    G  3
-3       F  3
-3          3
-3R F P  B D3
-322222222223
+1222222222222222223
+4G  jB     8ccccca4
+4          fG   Ff4
+4     89a  f     i4
+4H   jghi  f  7  f4
+47 b9cppi bi  f  f4
+4f  fG Rf  gd gd f4
+4f  f   f  f  f  f4
+4gd f bchd f  f  f4
+4f  f   f  f  f bi4
+4f  f   f  f  f  f4
+4f  fj  f bi bi  f4
+4f bhcd f  f  gd f4
+4f  f   f  f  f  f4
+4f  f   od n  f bi4
+4nP nj     j  n Dn4
+4555555555555555554
+4222222222222222224
