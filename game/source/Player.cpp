@@ -8,6 +8,11 @@
 #define HITBOX_REDUCTION 2		// Indica cuantos pixeles quitamos al size para las colisiones de amplitud (x)
 #define MOVEMENT_VELOCITY 1		// [pxls]
 
+/*
+#define GRAVITY 0.2
+#define JUMP_VELOCITY 4
+*/
+
 #define JUMP_ANGLE_STEP 4
 #define FALL_STEP 4
 #define JUMP_HEIGHT 3*16		// bloques * pixeles_bloque
@@ -33,6 +38,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram){
 	bDead = false;
 	canJump = true;
 	win_state = false;
+	vertical_velocity = 0;
 
 	// Cargar textura
 	spritesheet.loadFromFile("images/bomberman.png", TEXTURE_PIXEL_FORMAT_RGBA);
@@ -77,7 +83,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram){
 
 		// Win
 		sprite->setAnimationSpeed(WIN, 8);
-		sprite->addKeyframe(WIN, glm::vec2(0.875f, 0.5f));
+		sprite->addKeyframe(WIN, glm::vec2(0.0f, 0.5f));
 
 	// Activamos la primera animacion
 	sprite->changeAnimation(0);
@@ -153,6 +159,36 @@ void Player::update(int deltaTime){
 		sprite->setFlipped(flipped);
 		sprite->changeAnimation(STAND);
 	}
+
+	/*
+	// Update vertical position
+	if (map->collisionMoveDown(glm::ivec2(posPlayer.x + HITBOX_REDUCTION, posPlayer.y + MOVEMENT_VELOCITY), glm::ivec2(PLAYER_SIZE - 2 * HITBOX_REDUCTION, PLAYER_SIZE), &posPlayer.y)) {
+		vertical_velocity = 0;
+		// Si queremos saltar...
+		if (Game::instance().getKey(GLFW_KEY_X) && canJump) {
+			vertical_velocity = -JUMP_VELOCITY;
+			cout << vertical_velocity << endl;
+			sprite->changeAnimation(JUMP);
+			canJump = false;
+		}
+		if (!canJump && !Game::instance().getKey(GLFW_KEY_X)) {
+			canJump = true;
+		}
+	}
+	else {
+		if (vertical_velocity < 1) sprite->changeAnimation(JUMP);
+		else sprite->changeAnimation(FALL);
+		vertical_velocity += GRAVITY;
+	}
+	posPlayer.y = posPlayer.y + vertical_velocity;
+
+	
+	// Colision techo
+	if (map->collisionMoveUp(glm::ivec2(posPlayer.x + HITBOX_REDUCTION, posPlayer.y), glm::ivec2(PLAYER_SIZE - 2 * HITBOX_REDUCTION, PLAYER_SIZE), &posPlayer.y)) {
+		vertical_velocity = 0;
+		sprite->changeAnimation(FALL);
+	}
+	*/
 	
 	// Salto 
 	if(bJumping){
@@ -183,7 +219,7 @@ void Player::update(int deltaTime){
 
 				// Colision techo
 				if (map->collisionMoveUp(glm::ivec2(posPlayer.x + HITBOX_REDUCTION, posPlayer.y), glm::ivec2(PLAYER_SIZE - 2*HITBOX_REDUCTION, PLAYER_SIZE), &posPlayer.y)){
-					bJumping = false;
+					jumpAngle = 180 - jumpAngle;
 					sprite->changeAnimation(FALL);
 				}
 			}

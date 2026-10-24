@@ -41,8 +41,13 @@ public:
 private:
     // Render
     Sprite* sprite;
+    std::vector<Sprite*> particles;
+    std::vector<int> spawnTime;
+    std::vector<int> lifeTime;
     Texture spritesheet;
+    Texture particle_spritesheet;
     glm::ivec2 tileDispl;
+    ShaderProgram* texProgram;
 
     // Atributos
     int vida;

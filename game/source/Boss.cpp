@@ -17,7 +17,8 @@
 #define VISIBLE_TIME 5
 #define INVISIBLE_TIME 5
 
-#define DYING_TIME 2000
+#define DYING_TIME 8000
+#define NUMBER_PARTICLES 25
 
 
 // Funciones de objecto
@@ -29,6 +30,7 @@ Boss::~Boss() {
 void Boss::init(const glm::vec2& pos, const glm::ivec2& tileMapDispl, ShaderProgram& shaderProgram) {
     position = pos;
     vida = 2;
+    texProgram = &shaderProgram;
     std::srand(std::time(nullptr));
 
     tileDispl = tileMapDispl;
@@ -41,6 +43,17 @@ void Boss::init(const glm::vec2& pos, const glm::ivec2& tileMapDispl, ShaderProg
     heavy_attack_finished = true;
     simple_attack_finished = true;
     attacking_time = 0;
+
+    particle_spritesheet.loadFromFile("images/particles.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    particle_spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
+    particle_spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
+    particle_spritesheet.setMinFilter(GL_NEAREST);
+    particle_spritesheet.setMagFilter(GL_NEAREST);
+    for (int i = 0; i < NUMBER_PARTICLES; ++i) {
+        particles.push_back(0);
+        spawnTime.push_back(0);
+        lifeTime.push_back(0);
+    }
 
     spritesheet.loadFromFile("images/Boss.png", TEXTURE_PIXEL_FORMAT_RGBA);
     spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
@@ -87,7 +100,16 @@ void Boss::init(const glm::vec2& pos, const glm::ivec2& tileMapDispl, ShaderProg
 
 void Boss::update(int deltaTime, TileMap* map, glm::vec2 player_pos) {
     if (state == BossState::DYING) {
-        if (deathTimer > 0) deathTimer -= deltaTime;
+        if (deathTimer > 0) {
+            deathTimer -= deltaTime;
+            for (int i = 0; i < NUMBER_PARTICLES; ++i) {
+                if (spawnTime[i] > 0) spawnTime[i] = spawnTime[i] - deltaTime;
+                else {
+                    particles[i]->update(deltaTime);
+                    if (lifeTime[i] > 0) lifeTime[i] = lifeTime[i] - deltaTime;
+                }
+            }
+        }
         else state = BossState::DEAD;
         return;
     }
@@ -168,7 +190,7 @@ void Boss::update(int deltaTime, TileMap* map, glm::vec2 player_pos) {
     }
     if (!leftMinion->isAlive()) leftMinion->deactivate();
     if (!rightMinion->isAlive()) rightMinion->deactivate();
-    // Podria fer que es pintés només si està actiu.
+    // Podria fer que es tractés només si està actiu.
     leftMinion->update(deltaTime, map, player_pos);
     rightMinion->update(deltaTime, map, player_pos);
     heavy->update(deltaTime, map, player_pos);
@@ -211,15 +233,22 @@ void Boss::update(int deltaTime, TileMap* map, glm::vec2 player_pos) {
 }
 
 void Boss::render() {
-    heavy->render();
-    leftMinion->render();
-    rightMinion->render();
-    simpleNW->render();
-    simpleWS->render();
-    simpleSE->render();
-    simpleEN->render();
+    if (state != BossState::DYING && state != BossState::DEAD) {
+        heavy->render();
+        leftMinion->render();
+        rightMinion->render();
+        simpleNW->render();
+        simpleWS->render();
+        simpleSE->render();
+        simpleEN->render();
+    }
     if (sprite && state != BossState::DEAD) {
         if (!immunity || visible) sprite->render();
+    }
+    if (state == BossState::DYING) {
+        for (int i = 0; i < NUMBER_PARTICLES; ++i) {
+            if(spawnTime[i] < 0 && lifeTime[i] > 0) particles[i]->render();
+        }
     }
 }
 
@@ -256,6 +285,19 @@ void Boss::getsDamage() {
 void Boss::kill() {
     state = BossState::DYING;
     deathTimer = DYING_TIME;
+    for (int i = 0; i < NUMBER_PARTICLES; ++i){
+        Sprite* aux = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(0.5f, 0.5f), &particle_spritesheet, texProgram);
+        aux->setNumberAnimations(1);
+        aux->setAnimationSpeed(0, 6);
+        aux->addKeyframe(0, glm::vec2(0.f, 0.f));
+        aux->addKeyframe(0, glm::vec2(0.5f, 0.f));
+        aux->addKeyframe(0, glm::vec2(0.5f, 0.5f));
+        aux->changeAnimation(0);
+        aux->setPosition(glm::vec2(tileDispl.x + position.x - 10 + rand() % 37, tileDispl.y + position.y - 10 + rand() % 37));
+        particles[i] = aux;
+        spawnTime[i] = rand() % DYING_TIME*0.7;
+        lifeTime[i] = rand() % DYING_TIME*0.5;
+    }
     if (leftMinion->getState() == MinionState::ACTIVE) leftMinion->kill();
     if (rightMinion->getState() == MinionState::ACTIVE) rightMinion->kill();
     sprite->changeAnimation(2);

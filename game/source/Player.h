@@ -84,6 +84,8 @@ private:
 	float deathTimer = 0.f;
 	bool win_state;
 
+	float vertical_velocity;
+
 };
 
 #endif // _PLAYER_INCLUDE
