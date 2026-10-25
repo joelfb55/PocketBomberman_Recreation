@@ -83,6 +83,8 @@ private:
 	int vidas = 3;
 	float deathTimer = 0.f;
 	bool win_state;
+	float winTimer = 0.f;
+
 
 	float vertical_velocity;
 

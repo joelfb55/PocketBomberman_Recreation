@@ -1,6 +1,7 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include "Game.h"
+#include "SoundManager.h"
 
 
 #define TARGET_FRAMERATE 60.0f
@@ -64,6 +65,10 @@ int main(void){
 	Game::instance().init();
 	timePreviousFrame = glfwGetTime();
 
+	// Inicializar el sistema de sonido
+	SoundManager::instance().init();
+	SoundManager::instance().playBGM("sound/music/Title_Screen.mp3");
+
 	/* Loop until the user closes the window */
 	while (!glfwWindowShouldClose(window))
 	{
@@ -83,6 +88,8 @@ int main(void){
 		/* Poll for and process events */
 		glfwPollEvents();
 	}
+
+	SoundManager::instance().cleanUp();
 
 	glfwTerminate();
 	return 0;

@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "Release\\Game.obj",
+            "outputs": [
+                "Release\\Game.cpp.obj.dt.module.json",
+                "Release\\Game.cpp.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}

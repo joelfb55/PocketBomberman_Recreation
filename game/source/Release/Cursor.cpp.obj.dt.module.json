@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "Release\\Cursor.obj",
+            "outputs": [
+                "Release\\Cursor.cpp.obj.dt.module.json",
+                "Release\\Cursor.cpp.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}

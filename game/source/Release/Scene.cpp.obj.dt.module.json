@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "Release\\Scene.obj",
+            "outputs": [
+                "Release\\Scene.cpp.obj.dt.module.json",
+                "Release\\Scene.cpp.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}

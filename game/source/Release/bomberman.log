@@ -1,0 +1,108 @@
+﻿  Bomba.cpp
+  BombUp.cpp
+  Boss.cpp
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(38,25): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(288,22): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(288,22): warning C4244:         with
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(288,22): warning C4244:         [
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(288,22): warning C4244:             T=float
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(288,22): warning C4244:         ]
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(289,22): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(289,22): warning C4244:         with
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(289,22): warning C4244:         [
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(289,22): warning C4244:             T=float
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(289,22): warning C4244:         ]
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(290,22): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(291,22): warning C4244: 'inicializando': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(328,43): warning C4244: '=': conversión de 'double' a '_Ty'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(328,43): warning C4244:         with
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(328,43): warning C4244:         [
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(328,43): warning C4244:             _Ty=int
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(328,43): warning C4244:         ]
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(329,42): warning C4244: '=': conversión de 'double' a '_Ty'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(329,42): warning C4244:         with
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(329,42): warning C4244:         [
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(329,42): warning C4244:             _Ty=int
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Boss.cpp(329,42): warning C4244:         ]
+  Cursor.cpp
+  Enemy.cpp
+  Explosion.cpp
+  Heart.cpp
+  FireUp.cpp
+  FloatingEnemy.cpp
+  Game.cpp
+  GhostEnemy.cpp
+  Info.cpp
+  main.cpp
+  Menu.cpp
+  Minion.cpp
+  Player.cpp
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Player.cpp(197,24): warning C4305: '+=': truncamiento de 'double' a 'float'
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Player.cpp(200,28): warning C4244: '=': conversión de 'float' a 'T'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Player.cpp(200,28): warning C4244:         with
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Player.cpp(200,28): warning C4244:         [
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Player.cpp(200,28): warning C4244:             T=int
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Player.cpp(200,28): warning C4244:         ]
+  PowerUp.cpp
+  RemoteController.cpp
+  Scene.cpp
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Scene.cpp(280,19): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Scene.cpp(288,20): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Scene.cpp(357,20): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Scene.cpp(494,24): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Scene.cpp(599,19): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Scene.cpp(612,19): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Scene.cpp(631,19): warning C4244: '=': conversión de 'float' a 'int'; posible pérdida de datos
+  Shader.cpp
+  Compilando...
+  ShaderProgram.cpp
+  Projectile.cpp
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(41,19): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(41,19): warning C4244:         with
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(41,19): warning C4244:         [
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(41,19): warning C4244:             T=float
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(41,19): warning C4244:         ]
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(73,14): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(73,14): warning C4244:         with
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(73,14): warning C4244:         [
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(73,14): warning C4244:             T=float
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(73,14): warning C4244:         ]
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(75,14): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(75,14): warning C4244:         with
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(75,14): warning C4244:         [
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(75,14): warning C4244:             T=float
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(75,14): warning C4244:         ]
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(78,20): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(78,20): warning C4244:         with
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(78,20): warning C4244:         [
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(78,20): warning C4244:             T=float
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(78,20): warning C4244:         ]
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(80,20): warning C4244: 'inicializando': conversión de 'T' a 'int'; posible pérdida de datos
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(80,20): warning C4244:         with
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(80,20): warning C4244:         [
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(80,20): warning C4244:             T=float
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Projectile.cpp(80,20): warning C4244:         ]
+  SoundManager.cpp
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\libs\miniaudio.h(80532,82): warning C4244: '=': conversión de 'ma_uint64' a 'ma_uint32'; posible pérdida de datos
+  (compilando archivo de origen "SoundManager.cpp")
+  
+  Sprite.cpp
+  Texture.cpp
+  TileMap.cpp
+  WalkerEnemy.cpp
+  WalkerEnemy.h
+Release\WalkerEnemy.obj : warning LNK4042: objeto especificado más de una vez; omitidos los sobrantes
+SOIL.lib(SOIL.obj) : warning LNK4075: se omite '/EDITANDCONTINUE' debido a la especificación '/OPT:ICF'
+LINK : warning LNK4098: la biblioteca predeterminada'MSVCRTD' entra en conflicto con otras bibliotecas; use la biblioteca /NODEFAULTLIB:biblioteca
+  Generando código
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Scene.cpp(122): warning C4715: 'Scene::lvl2menu': no todas las rutas de acceso de control devuelven un valor
+C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\source\Info.cpp(84): warning C4715: 'Info::num2coords': no todas las rutas de acceso de control devuelven un valor
+  3093 of 3114 functions (99.3%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    2 functions had inline decision re-evaluated but remain unchanged
+  Generación de código finalizada
+SOIL.lib(image_DXT.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_DXT.obj)' o en 'C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\Release\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(image_helper.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(image_helper.obj)' o en 'C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\Release\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(SOIL.obj) : warning LNK4099: no se encontró PDB '' con 'SOIL.lib(SOIL.obj)' o en ''; se vinculará el objeto sin tener en cuenta información de depuración
+SOIL.lib(stb_image_aug.obj) : warning LNK4099: no se encontró PDB 'vc100.pdb' con 'SOIL.lib(stb_image_aug.obj)' o en 'C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\Release\vc100.pdb'; se vinculará el objeto sin tener en cuenta información de depuración
+  bomberman.vcxproj -> C:\Users\joelf\Downloads\Classe\VJ\Lab\Juego2D\Vers3_Sonidos\Bomberman\game\Release\Bomberman.exe

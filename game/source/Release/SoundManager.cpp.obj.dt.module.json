@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "Release\\SoundManager.obj",
+            "outputs": [
+                "Release\\SoundManager.cpp.obj.dt.module.json",
+                "Release\\SoundManager.cpp.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}

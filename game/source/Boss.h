@@ -57,6 +57,7 @@ private:
     int time_next_attack;
     int next_attack;
     int attacking_time;
+    int death_sound_time;
     bool simple_attack_finished, heavy_attack_finished, minion_attack_finished;
     int deathTimer = 0;
 

@@ -82,6 +82,9 @@
     <ClCompile Include="Minion.cpp">
       <Filter>Archivos de código fuente\Enemigos</Filter>
     </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Archivos de código fuente\General</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimKeyframes.h">
@@ -158,6 +161,9 @@
     </ClInclude>
     <ClInclude Include="Minion.h">
       <Filter>Archivos de encabezado\Enemigos</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Archivos de encabezado\General</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

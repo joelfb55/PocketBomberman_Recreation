@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "Release\\Bomba.obj",
+            "outputs": [
+                "Release\\Bomba.cpp.obj.dt.module.json",
+                "Release\\Bomba.cpp.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}

@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "Release\\Shader.obj",
+            "outputs": [
+                "Release\\Shader.h.obj.dt.module.json",
+                "Release\\Shader.h.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}

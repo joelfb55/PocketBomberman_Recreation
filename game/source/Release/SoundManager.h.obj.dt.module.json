@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "Release\\SoundManager.obj",
+            "outputs": [
+                "Release\\SoundManager.h.obj.dt.module.json",
+                "Release\\SoundManager.h.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}

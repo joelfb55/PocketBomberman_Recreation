@@ -1,4 +1,6 @@
 #include "Boss.h"
+#include "SoundManager.h"
+
 
 #include <iostream>
 
@@ -19,6 +21,8 @@
 
 #define DYING_TIME 8000
 #define NUMBER_PARTICLES 25
+
+#define BOSS_DEATH_SOUND_INTERVAL 1000.f
 
 
 // Funciones de objecto
@@ -96,12 +100,15 @@ void Boss::init(const glm::vec2& pos, const glm::ivec2& tileMapDispl, ShaderProg
     leftMinion->init(position, tileMapDispl, shaderProgram);
     rightMinion = new Minion();
     rightMinion->init(position, tileMapDispl, shaderProgram);
+
+    death_sound_time = 0;
 }
 
 void Boss::update(int deltaTime, TileMap* map, glm::vec2 player_pos) {
     if (state == BossState::DYING) {
         if (deathTimer > 0) {
             deathTimer -= deltaTime;
+
             for (int i = 0; i < NUMBER_PARTICLES; ++i) {
                 if (spawnTime[i] > 0) spawnTime[i] = spawnTime[i] - deltaTime;
                 else {
@@ -109,8 +116,18 @@ void Boss::update(int deltaTime, TileMap* map, glm::vec2 player_pos) {
                     if (lifeTime[i] > 0) lifeTime[i] = lifeTime[i] - deltaTime;
                 }
             }
+            
         }
         else state = BossState::DEAD;
+
+        // Sonido
+        death_sound_time += deltaTime;
+        if (death_sound_time >= BOSS_DEATH_SOUND_INTERVAL && state == BossState::DYING) {
+            SoundManager::instance().playSFX("sound/effects/Muerte_Boss.wav");
+            death_sound_time = 0;
+        }
+
+
         return;
     }
     if (state == BossState::MOVING || state == BossState::ATTACK2) {
@@ -143,6 +160,9 @@ void Boss::update(int deltaTime, TileMap* map, glm::vec2 player_pos) {
                 simpleWS->activate(position + glm::vec2(8.f, 8.f), glm::vec2(-1, 1));
                 simpleSE->activate(position + glm::vec2(8.f, 8.f), glm::vec2(1, -1));
                 simpleEN->activate(position + glm::vec2(8.f, 8.f), glm::vec2(1, 1));
+                
+                SoundManager::instance().playSFX("sound/effects/Hueso.wav");
+
                 time_next_attack = rand() % (MAX - MIN) + MIN;
                 next_attack = rand() % NUMBER_ATTACKS;
                 attacking_time = 0;
@@ -153,9 +173,14 @@ void Boss::update(int deltaTime, TileMap* map, glm::vec2 player_pos) {
                 heavy->activate(position + glm::vec2(8.f, 8.f), player_pos - (position + glm::vec2(8.f, 8.f)));
                 time_next_attack = rand() % (MAX - MIN) + MIN;
                 next_attack = rand() % NUMBER_ATTACKS;
+
+                SoundManager::instance().playSFX("sound/effects/Bolas.wav");
+
                 attacking_time = 0;
             }
             else if (minion_attack_finished) {
+                SoundManager::instance().playSFX("sound/effects/Minion.wav");
+
                 state = BossState::ATTACK3;
                 minion_attack_finished = false;
                 minion_living_time = MINION_LIVING_TIME;
@@ -283,6 +308,11 @@ void Boss::getsDamage() {
 }
 
 void Boss::kill() {
+    SoundManager::instance().stopBGM();
+
+    death_sound_time = 0;
+    SoundManager::instance().playSFX("sound/effects/Muerte_Boss.wav");
+
     state = BossState::DYING;
     deathTimer = DYING_TIME;
     for (int i = 0; i < NUMBER_PARTICLES; ++i){
@@ -297,10 +327,12 @@ void Boss::kill() {
         particles[i] = aux;
         spawnTime[i] = rand() % DYING_TIME*0.7;
         lifeTime[i] = rand() % DYING_TIME*0.5;
+
     }
     if (leftMinion->getState() == MinionState::ACTIVE) leftMinion->kill();
     if (rightMinion->getState() == MinionState::ACTIVE) rightMinion->kill();
     sprite->changeAnimation(2);
+
 }
 
 Minion* Boss::getLeftMinion() { return leftMinion; }

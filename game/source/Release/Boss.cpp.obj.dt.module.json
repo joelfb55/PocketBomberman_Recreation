@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "Release\\Boss.obj",
+            "outputs": [
+                "Release\\Boss.cpp.obj.dt.module.json",
+                "Release\\Boss.cpp.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}

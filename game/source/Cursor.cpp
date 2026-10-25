@@ -5,6 +5,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "Game.h"
 #include "Cursor.h"
+#include "SoundManager.h"
+
 
 using namespace std;
 
@@ -83,17 +85,25 @@ void Cursor::update(int deltaTime) {
 		else if (p == Pointing::INST) p = Pointing::PLAY;
 		else if (p == Pointing::PLAY) p = Pointing::CREDITS;
 		canChangeUp = false;
+		SoundManager::instance().playSFX("sound/effects/Cursor.wav");
+
 	}
 	if (canChangeDown && Game::instance().getKey(GLFW_KEY_DOWN)) {
 		if (p == Pointing::PLAY) p = Pointing::INST;
 		else if (p == Pointing::INST) p = Pointing::CREDITS;
 		else if (p == Pointing::CREDITS) p = Pointing::PLAY;
 		canChangeDown = false;
+		SoundManager::instance().playSFX("sound/effects/Cursor.wav");
+
 	}
-	if (!canChangeUp && !Game::instance().getKey(GLFW_KEY_UP))
+	if (!canChangeUp && !Game::instance().getKey(GLFW_KEY_UP)) {
+
 		canChangeUp = true;
-	if (!canChangeDown && !Game::instance().getKey(GLFW_KEY_DOWN))
+	}
+	if (!canChangeDown && !Game::instance().getKey(GLFW_KEY_DOWN)) {
 		canChangeDown = true;
+
+	}
 
 }
 

@@ -1,0 +1,14 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "Release\\TileMap.obj",
+            "outputs": [
+                "Release\\TileMap.cpp.obj.dt.module.json",
+                "Release\\TileMap.cpp.obj.dt.d.json"
+            ],
+            "requires": []
+        }
+    ]
+}

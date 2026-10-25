@@ -3,6 +3,8 @@
 #include <GL/glew.h>
 #include "Player.h"
 #include "Game.h"
+#include "SoundManager.h"
+
 
 #define PLAYER_SIZE 16
 #define HITBOX_REDUCTION 2		// Indica cuantos pixeles quitamos al size para las colisiones de amplitud (x)
@@ -23,6 +25,9 @@
 
 #define DEATH_ANIMATION_TIME 1000.f
 #define DEATH_BOMB_ANIMATION_TIME 900.f
+
+#define WIN_ANIMATION_TIME 3500.f
+
 
 // FUNCIONES DE OBJETO
 Player::Player(){
@@ -96,13 +101,22 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram){
 // FUNCIONES DE JUEGO
 void Player::update(int deltaTime){
 	sprite->update(deltaTime);				// Actualiza la animacion activa a su siguiente KeyFrame (segun tiempo)
-	if (win_state) return;
+	if (win_state) {
+		winTimer -= float(deltaTime);
+		if (winTimer <= 0) {
+			win_state = false;
+			gameOverReset();
+
+		}
+		return;
+	} 
 
 	// Muerto
 	if (bDead) {
 		deathTimer -= float(deltaTime);
 		return;
 	}
+
 
 	if (immunity) {
 		if (visible) {
@@ -167,6 +181,7 @@ void Player::update(int deltaTime){
 		if (vertical_velocity < 0) sprite->changeAnimation(JUMP);
 		// Si queremos saltar...
 		if (Game::instance().getKey(GLFW_KEY_X) && canJump) {
+			SoundManager::instance().playSFX("sound/effects/Salto.wav");
 			vertical_velocity = -JUMP_VELOCITY;
 			//cout << vertical_velocity << endl;
 			sprite->changeAnimation(JUMP);
@@ -310,6 +325,9 @@ void Player::die(bool by_bomb, int deltaTime) {
 		sprite->changeAnimation(DEATH_BY_ENEMY);
 		deathTimer = DEATH_ANIMATION_TIME;
 	}
+
+	SoundManager::instance().stopBGM();
+
 }
 bool Player::isDeathAnimationFinished() const { return bDead && deathTimer <= 0.f; }
 bool Player::isDead() const { return bDead; }
@@ -354,5 +372,5 @@ bool Player::isRemoteActive() { return remoteExplosion; }
 void Player::win() { 
 	sprite->changeAnimation(WIN); 
 	win_state = true;
-	gameOverReset();
+	winTimer = WIN_ANIMATION_TIME;
 }
